@@ -2,13 +2,20 @@ package com.philipthedev.gamejam.paradox.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 
 /**
  * Frame to display the game.
  */
-public final class MainFrame extends JFrame {
+public final class MainFrame extends JFrame implements MouseMotionListener, MouseListener {
 
     private static final MainFrame mainFrame = new MainFrame();
+
+    private Point   mousePosition = new Point(0, 0);
+    private boolean mouseDown     = false;
 
     private boolean alive = true;
     private Scene scene = null;
@@ -18,6 +25,10 @@ public final class MainFrame extends JFrame {
         setTitle("The Paradox that Ends the World");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);
+
+        addMouseListener(this);
+        addMouseMotionListener(this);
+
         setVisible(true);
 
         Thread renderInvocationLoop = new Thread(this::renderInvocationLoop);
@@ -35,13 +46,17 @@ public final class MainFrame extends JFrame {
 
     @Override
     public void paint(Graphics g) {
-        Graphics2D graphics2D = (Graphics2D) g;
         Scene scene = this.scene;
         if (scene != null) {
             Insets insets = getInsets();
             Dimension size = new Dimension(getWidth() - insets.left - insets.right, getHeight() - insets.top - insets.bottom);
-            Meta meta = new Meta(size);
-            scene.render(graphics2D, meta, this);
+            boolean mouseDown = this.mouseDown;
+            Meta meta = new Meta(size, mousePosition, mouseDown);
+            BufferedImage ghostImage = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2D = ghostImage.createGraphics();
+            scene.render(g2D, meta, this);
+            g2D.dispose();
+            g.drawImage(ghostImage, 0 ,0, this);
         }
     }
 
@@ -64,5 +79,49 @@ public final class MainFrame extends JFrame {
             }
             currentTimeStamp = System.currentTimeMillis();
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        this.mousePosition = new Point(x, y);
+        mouseDown = true;
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        this.mousePosition = new Point(x, y);
+        mouseDown = false;
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        this.mousePosition = new Point(x, y);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        this.mousePosition = new Point(x, y);
     }
 }
