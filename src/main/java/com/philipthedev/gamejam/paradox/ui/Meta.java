@@ -11,12 +11,15 @@ public class Meta {
     private final Point mousePosition;
     private final boolean mouseDown;
 
+    private Point offsetMousePosition;
+
     public Meta(Dimension size,
                 Point mousePosition,
                 boolean mouseDown) {
         this.size = size;
         this.mousePosition =  mousePosition;
         this.mouseDown = mouseDown;
+        offsetMousePosition = mousePosition;
     }
 
     public Dimension getSize() {
@@ -24,11 +27,19 @@ public class Meta {
     }
 
     public Point getMousePosition() {
-        return mousePosition;
+        return offsetMousePosition;
     }
 
     public boolean isMouseDown() {
         return mouseDown;
+    }
+
+    public void translate(int offsetX, int offsetY) {
+        this.offsetMousePosition = new Point(mousePosition.x - offsetX, mousePosition.y - offsetY);
+    }
+
+    public void clear() {
+        this.offsetMousePosition = mousePosition;
     }
 
     public Random getRandom() {

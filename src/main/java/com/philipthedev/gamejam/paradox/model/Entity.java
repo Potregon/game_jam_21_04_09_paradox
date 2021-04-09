@@ -61,7 +61,7 @@ public abstract class Entity {
                         return RoundState.FINISHED;
                     }
                     else {
-                        this.currentTrack = getTrackOrNull(tracks);
+                        this.currentTrack = getTrackOrNull(model, tracks);
                         if (currentTrack == null) {
                             return RoundState.PENDING;
                         }
@@ -115,7 +115,7 @@ public abstract class Entity {
         this.posY = startPosY;
     }
 
-    abstract Track getTrackOrNull(Set<Track> tracks);
+    abstract Track getTrackOrNull(Model model, Set<Track> tracks);
 
     abstract public void render(Graphics2D g, ImageObserver observer);
 
@@ -136,7 +136,7 @@ public abstract class Entity {
     }
 
     public boolean isBlockingField(int x, int y) {
-        return getFieldX() == x && getFieldY() == y;
+        return phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
     }
 
     public enum RoundState {

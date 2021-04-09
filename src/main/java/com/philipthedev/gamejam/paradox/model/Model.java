@@ -36,14 +36,14 @@ public final class Model {
                 char cell = row.charAt(x);
                 switch (cell) {
                     case 'W':
-                        fields[x][y] = new Field(Field.FieldType.SOLID);
+                        fields[x][y] = new Field(Field.FieldType.SOLID, x, y);
                         break;
                     case 'p':
-                        fields[x][y] = new Field(Field.FieldType.PASSABLE);
+                        fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
                         entities.add(new PlayerEntity(x, y));
                         break;
                     default:
-                        fields[x][y] = new Field(Field.FieldType.PASSABLE);
+                        fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
                         break;
                 }
             }
@@ -94,6 +94,14 @@ public final class Model {
                 else {
                     currentEntity = entities.get(nextIndex);
                 }
+            }
+        }
+    }
+
+    public void clearActions() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                fields[x][y].setAction(null);
             }
         }
     }

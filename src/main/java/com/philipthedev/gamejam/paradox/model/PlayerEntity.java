@@ -15,14 +15,28 @@ public class PlayerEntity extends Entity {
 
     Random random = new Random();
 
+    private Track selectedTrack = null;
+
     public PlayerEntity(int fieldX, int fieldY) {
         super(fieldX, fieldY);
     }
 
     @Override
-    Track getTrackOrNull(Set<Track> tracks) {
-        ArrayList<Track> trackList = new ArrayList<>(tracks);
-        return trackList.get(random.nextInt(trackList.size()));
+    Track getTrackOrNull(Model model, Set<Track> tracks) {
+        if (selectedTrack != null) {
+            Track result = selectedTrack;
+            selectedTrack = null;
+            return result;
+        }
+        for (var track : tracks) {
+            Field field = model.getField(track.getTarget().getX(), track.getTarget().getY());
+            field.setAction(new Action(new Color(0, 255, 0, 50), new Color(0, 255, 0, 250),
+                    () -> {
+                        selectedTrack = track;
+                        model.clearActions();
+                    }));
+        }
+        return null;
     }
 
     @Override

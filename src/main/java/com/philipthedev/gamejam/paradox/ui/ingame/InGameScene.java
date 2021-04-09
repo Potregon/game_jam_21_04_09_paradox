@@ -37,18 +37,20 @@ public class InGameScene implements Scene{
         g.fillRect(0, 0, meta.getSize().width, meta.getSize().height);
         AffineTransform outerTransform = g.getTransform();
         g.translate(-offsetX + meta.getSize().width / 2 , -offsetY + meta.getSize().height / 2);
+        meta.translate(-offsetX + meta.getSize().width / 2 , -offsetY + meta.getSize().height / 2);
         AffineTransform transform = g.getTransform();
         for (int x = 0; x < model.getWidth(); x++) {
             for (int y = 0; y < model.getHeight(); y++) {
                 Field field = model.getField(x, y);
                 g.translate(x * TILE_SIZE, y * TILE_SIZE);
-                field.render(g, TILE_SIZE, imageObserver);
+                field.render(g, meta, imageObserver);
                 g.setTransform(transform);
             }
         }
         for (var entity : model.listEntities()) {
             entity.render(g, imageObserver);
         }
+        meta.clear();
         g.setTransform(outerTransform);
     }
 }
