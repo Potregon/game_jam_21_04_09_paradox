@@ -1,5 +1,7 @@
 package com.philipthedev.gamejam.paradox.model;
 
+import com.philipthedev.gamejam.paradox.model.foes.Trolling;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +43,10 @@ public final class Model {
                     case 'p':
                         fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
                         entities.add(new PlayerEntity(x, y));
+                        break;
+                    case 't':
+                        fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
+                        entities.add(new Trolling(x, y));
                         break;
                     default:
                         fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);

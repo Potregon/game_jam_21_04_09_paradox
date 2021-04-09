@@ -22,7 +22,7 @@ public class PlayerEntity extends Entity {
     }
 
     @Override
-    Track getTrackOrNull(Model model, Set<Track> tracks) {
+    public Track getTrackOrNull(Model model, Set<Track> tracks) {
         if (selectedTrack != null) {
             Track result = selectedTrack;
             selectedTrack = null;

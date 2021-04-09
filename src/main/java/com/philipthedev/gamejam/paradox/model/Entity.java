@@ -115,7 +115,7 @@ public abstract class Entity {
         this.posY = startPosY;
     }
 
-    abstract Track getTrackOrNull(Model model, Set<Track> tracks);
+    abstract public Track getTrackOrNull(Model model, Set<Track> tracks);
 
     abstract public void render(Graphics2D g, ImageObserver observer);
 
