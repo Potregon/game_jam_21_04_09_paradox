@@ -116,6 +116,7 @@ public final class Model {
 
     private void nextRound() {
         if (round >= 3) {
+            entities.forEach(Entity::reset);
             round = 1;
         }
         else {

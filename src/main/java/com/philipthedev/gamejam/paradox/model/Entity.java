@@ -17,6 +17,9 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
  */
 public abstract class Entity {
 
+    private final int startPosX;
+    private final int startPosY;
+
     private int posX = 0;
     private int posY = 0;
     private int range = 5;
@@ -29,6 +32,8 @@ public abstract class Entity {
     public Entity(int fieldX, int fieldY) {
         posX = fieldX * TILE_SIZE;
         posY = fieldY * TILE_SIZE;
+        this.startPosX = posX;
+        this.startPosY = posY;
     }
 
 
@@ -104,6 +109,11 @@ public abstract class Entity {
         }
         throw new IllegalStateException("Something went wrong in Entity. Phase was: " + phase.toString());
     };
+
+    void reset() {
+        this.posX = startPosX;
+        this.posY = startPosY;
+    }
 
     abstract Track getTrackOrNull(Set<Track> tracks);
 
