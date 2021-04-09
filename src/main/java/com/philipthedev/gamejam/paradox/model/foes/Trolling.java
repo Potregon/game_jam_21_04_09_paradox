@@ -29,4 +29,9 @@ public class Trolling extends Entity {
         g.setColor(Color.RED);
         g.fillRect(getPosX() + 8, getPosY() + 8, TILE_SIZE - 16, TILE_SIZE - 16);
     }
+
+    @Override
+    public boolean doAction(Model model) {
+        return true;
+    }
 }

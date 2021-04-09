@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -107,7 +106,7 @@ public final class Model {
     public void clearActions() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                fields[x][y].setAction(null);
+                fields[x][y].setFieldAction(null);
             }
         }
     }

@@ -57,8 +57,7 @@ public abstract class Entity {
                 } else {
                     Set<Track> tracks = Pathfinder.findPath(model, getFieldX(), getFieldY(), range);
                     if (tracks.isEmpty()) {
-                        phase = Phase.IDLE;
-                        return RoundState.FINISHED;
+                        phase = Phase.ATTACK;
                     }
                     else {
                         this.currentTrack = getTrackOrNull(model, tracks);
@@ -76,8 +75,7 @@ public abstract class Entity {
                 if (getPosX() == target.getX() * TILE_SIZE && getPosY() == target.getY() * TILE_SIZE) {
                     moveToPosition = null;
                     currentTrack = null;
-                    phase = Phase.IDLE;
-                    return RoundState.FINISHED;
+                    phase = Phase.ATTACK;
                 }
                 else {
                     if (moveToPosition == null) {
@@ -107,6 +105,11 @@ public abstract class Entity {
                 }
             }
         }
+
+        if (phase == Phase.ATTACK) {
+            phase = Phase.IDLE;
+            return RoundState.FINISHED;
+        }
         throw new IllegalStateException("Something went wrong in Entity. Phase was: " + phase.toString());
     };
 
@@ -117,7 +120,14 @@ public abstract class Entity {
 
     abstract public Track getTrackOrNull(Model model, Set<Track> tracks);
 
+    /**
+     * @param model
+     * @return {@code true} iff the game should continue.
+     */
+    abstract public boolean doAction(Model model);
+
     abstract public void render(Graphics2D g, ImageObserver observer);
+
 
     public int getPosX() {
         return posX;

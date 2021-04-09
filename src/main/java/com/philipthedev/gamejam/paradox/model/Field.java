@@ -12,7 +12,7 @@ public class Field {
     private final FieldType type;
     private final int x;
     private final int y;
-    private Action action = null;
+    private FieldAction fieldAction = null;
 
     public Field(FieldType fieldType, int x, int y) {
         this.type = fieldType;
@@ -23,24 +23,24 @@ public class Field {
     public void render(Graphics2D g, Meta meta, ImageObserver imageObserver) {
         g.setColor(type.getColor());
         g.fillRect(0, 0, TILE_SIZE, TILE_SIZE);
-        if (action != null) {
+        if (fieldAction != null) {
             int mouseX = meta.getMousePosition().x / TILE_SIZE;
             int mouseY = meta.getMousePosition().y / TILE_SIZE;
             if (mouseX == x && mouseY == y) {
-                g.setColor(action.getHighlightColor());
+                g.setColor(fieldAction.getHighlightColor());
                 if (meta.isMouseDown()) {
-                    action.getAction().run();
+                    fieldAction.getAction().run();
                 }
             }
             else {
-                g.setColor(action.getColor());
+                g.setColor(fieldAction.getColor());
             }
             g.fillRect(0, 0, TILE_SIZE, TILE_SIZE);
         }
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+    public void setFieldAction(FieldAction fieldAction) {
+        this.fieldAction = fieldAction;
     }
 
     public boolean isBlocked() {

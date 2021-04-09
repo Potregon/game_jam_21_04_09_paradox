@@ -3,9 +3,7 @@ package com.philipthedev.gamejam.paradox.model;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.ImageObserver;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
@@ -30,13 +28,18 @@ public class PlayerEntity extends Entity {
         }
         for (var track : tracks) {
             Field field = model.getField(track.getTarget().getX(), track.getTarget().getY());
-            field.setAction(new Action(new Color(0, 255, 0, 50), new Color(0, 255, 0, 250),
+            field.setFieldAction(new FieldAction(new Color(0, 255, 0, 50), new Color(0, 255, 0, 250),
                     () -> {
                         selectedTrack = track;
                         model.clearActions();
                     }));
         }
         return null;
+    }
+
+    @Override
+    public boolean doAction(Model model) {
+        return true;
     }
 
     @Override
