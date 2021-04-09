@@ -38,8 +38,8 @@ public class PlayerEntity extends Entity {
     }
 
     @Override
-    public boolean doAction(Model model) {
-        return true;
+    public AttackAction getAttackActionOrNull(Model model) {
+        return AttackAction.NEXT_ROUND;
     }
 
     @Override

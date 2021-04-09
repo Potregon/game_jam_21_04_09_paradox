@@ -3,6 +3,7 @@ package com.philipthedev.gamejam.paradox.ui.ingame;
 import com.philipthedev.gamejam.paradox.model.Entity;
 import com.philipthedev.gamejam.paradox.model.Field;
 import com.philipthedev.gamejam.paradox.model.Model;
+import com.philipthedev.gamejam.paradox.model.PlayerEntity;
 import com.philipthedev.gamejam.paradox.ui.Meta;
 import com.philipthedev.gamejam.paradox.ui.Scene;
 
@@ -27,11 +28,11 @@ public class InGameScene implements Scene{
 
     @Override
     public void render(Graphics2D g, Meta meta, ImageObserver imageObserver) {
+        PlayerEntity playerEntity = model.getPlayerEntity();
         model.calculateModel();
-        Entity currentEntity = model.getCurrentEntityOrNull();
-        if (currentEntity != null) {
-            offsetX = currentEntity.getPosX() + TILE_SIZE / 2;
-            offsetY = currentEntity.getPosY() + TILE_SIZE / 2;
+        if (playerEntity != null) {
+            offsetX = playerEntity.getPosX() + TILE_SIZE / 2;
+            offsetY = playerEntity.getPosY() + TILE_SIZE / 2;
         }
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, meta.getSize().width, meta.getSize().height);
@@ -49,6 +50,15 @@ public class InGameScene implements Scene{
         }
         for (var entity : model.listEntities()) {
             entity.render(g, imageObserver);
+        }
+        if (playerEntity != null) {
+            playerEntity.render(g, imageObserver);
+        }
+        for (var entity : model.listEntities()) {
+            entity.renderAttack(g, imageObserver);
+        }
+        if (playerEntity != null) {
+            playerEntity.renderAttack(g, imageObserver);
         }
         meta.clear();
         g.setTransform(outerTransform);

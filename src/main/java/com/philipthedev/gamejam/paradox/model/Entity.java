@@ -4,11 +4,10 @@ import com.philipthedev.gamejam.paradox.model.pathfinding.Pathfinder;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Position;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 
+import java.util.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 
@@ -26,8 +25,12 @@ public abstract class Entity {
 
     private Phase phase = Phase.IDLE;
     private Map<Integer, Track> roundToTrack = new HashMap<>();
+    private Map<Integer, List<AttackAction>> roundToAction = new HashMap<>();
+
     private Track currentTrack;
     private Position moveToPosition = null;
+    private final List<AttackAction> savedAttackActions = new ArrayList<>();
+    private AttackAction currentAttackAction = null;
 
     public Entity(int fieldX, int fieldY) {
         posX = fieldX * TILE_SIZE;
@@ -107,8 +110,50 @@ public abstract class Entity {
         }
 
         if (phase == Phase.ATTACK) {
-            phase = Phase.IDLE;
-            return RoundState.FINISHED;
+            List<AttackAction> attackActions = roundToAction.get(model.getRound());
+            if (attackActions != null && !attackActions.isEmpty()) {
+                if (currentAttackAction != null) {
+                    boolean successful = currentAttackAction.executeAction(this, model);
+                    if (successful) {
+                        int nextIndex = attackActions.indexOf(currentAttackAction) + 1;
+                        if (nextIndex >= attackActions.size()) {
+                            phase = Phase.IDLE;
+                            currentAttackAction = null;
+                            return RoundState.FINISHED;
+                        }
+                    }
+                    else {
+                        return RoundState.PENDING;
+                    }
+                }
+                else {
+                    currentAttackAction = attackActions.get(0);
+                }
+            }
+            else {
+                if (currentAttackAction == null) {
+                    currentAttackAction = getAttackActionOrNull(model);
+                    if (currentAttackAction == null) {
+                        return RoundState.PENDING;
+                    }
+                    else if (currentAttackAction == AttackAction.NEXT_ROUND) {
+                        roundToAction.put(model.getRound(), new ArrayList<>(savedAttackActions));
+                        savedAttackActions.clear();
+                        phase = Phase.IDLE;
+                        return RoundState.FINISHED;
+                    }
+                    else  {
+                        savedAttackActions.add(currentAttackAction);
+                    }
+                }
+                if (currentAttackAction != null) {
+                  boolean successful = currentAttackAction.executeAction(this, model);
+                  if (successful) {
+                      currentAttackAction = null;
+                  }
+                }
+                return RoundState.PENDING;
+            }
         }
         throw new IllegalStateException("Something went wrong in Entity. Phase was: " + phase.toString());
     };
@@ -124,9 +169,15 @@ public abstract class Entity {
      * @param model
      * @return {@code true} iff the game should continue.
      */
-    abstract public boolean doAction(Model model);
+    abstract public AttackAction getAttackActionOrNull(Model model);
 
     abstract public void render(Graphics2D g, ImageObserver observer);
+
+    public void renderAttack(Graphics2D g, ImageObserver observer) {
+        if (currentAttackAction != null) {
+            currentAttackAction.render(g, observer);
+        }
+    }
 
 
     public int getPosX() {

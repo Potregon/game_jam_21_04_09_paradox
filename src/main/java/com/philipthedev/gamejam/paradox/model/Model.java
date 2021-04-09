@@ -19,6 +19,7 @@ public final class Model {
     private final int height;
 
     private final List<Entity> entities = new ArrayList<>();
+    private PlayerEntity playerEntity = null;
     private Entity currentEntity = null;
     private int round = 1;
 
@@ -41,7 +42,7 @@ public final class Model {
                         break;
                     case 'p':
                         fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
-                        entities.add(new PlayerEntity(x, y));
+                        playerEntity = new PlayerEntity(x, y);
                         break;
                     case 't':
                         fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
@@ -91,13 +92,18 @@ public final class Model {
                 return;
             }
             else {
-                int nextIndex = entities.indexOf(currentEntity) + 1;
-                if (nextIndex >= entities.size()) {
+                if (currentEntity == playerEntity) {
                     currentEntity = null;
                     nextRound();
                 }
                 else {
-                    currentEntity = entities.get(nextIndex);
+                    int nextIndex = entities.indexOf(currentEntity) + 1;
+                    if (nextIndex >= entities.size()) {
+                        currentEntity = playerEntity;
+                    }
+                    else {
+                        currentEntity = entities.get(nextIndex);
+                    }
                 }
             }
         }
@@ -135,6 +141,10 @@ public final class Model {
         else {
             round++;
         }
+    }
+
+    public PlayerEntity getPlayerEntity() {
+        return playerEntity;
     }
 
     private String loadMap() {

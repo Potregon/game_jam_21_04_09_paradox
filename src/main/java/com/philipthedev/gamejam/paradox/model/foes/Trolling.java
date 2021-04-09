@@ -1,5 +1,6 @@
 package com.philipthedev.gamejam.paradox.model.foes;
 
+import com.philipthedev.gamejam.paradox.model.AttackAction;
 import com.philipthedev.gamejam.paradox.model.Entity;
 import com.philipthedev.gamejam.paradox.model.Model;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
@@ -31,7 +32,7 @@ public class Trolling extends Entity {
     }
 
     @Override
-    public boolean doAction(Model model) {
-        return true;
+    public AttackAction getAttackActionOrNull(Model model) {
+        return AttackAction.NEXT_ROUND;
     }
 }
