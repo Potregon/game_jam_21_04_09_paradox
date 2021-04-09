@@ -112,25 +112,23 @@ public abstract class Entity {
         if (phase == Phase.ATTACK) {
             List<AttackAction> attackActions = roundToAction.get(model.getRound());
             if (attackActions != null && !attackActions.isEmpty()) {
+                if (currentAttackAction == null) {
+                    currentAttackAction = attackActions.get(0);
+                }
                 if (currentAttackAction != null) {
                     boolean successful = currentAttackAction.executeAction(this, model);
                     if (successful) {
                         int nextIndex = attackActions.indexOf(currentAttackAction) + 1;
                         if (nextIndex >= attackActions.size()) {
-                            phase = Phase.IDLE;
                             currentAttackAction = null;
+                            phase = Phase.IDLE;
                             return RoundState.FINISHED;
                         }
-                    }
-                    else {
+                    } else {
                         return RoundState.PENDING;
                     }
                 }
-                else {
-                    currentAttackAction = attackActions.get(0);
-                }
-            }
-            else {
+            } else {
                 if (currentAttackAction == null) {
                     currentAttackAction = getAttackActionOrNull(model);
                     if (currentAttackAction == null) {
@@ -139,6 +137,7 @@ public abstract class Entity {
                     else if (currentAttackAction == AttackAction.NEXT_ROUND) {
                         roundToAction.put(model.getRound(), new ArrayList<>(savedAttackActions));
                         savedAttackActions.clear();
+                        currentAttackAction = null;
                         phase = Phase.IDLE;
                         return RoundState.FINISHED;
                     }
@@ -161,6 +160,7 @@ public abstract class Entity {
     void reset() {
         this.posX = startPosX;
         this.posY = startPosY;
+        this.phase = Phase.IDLE;
     }
 
     abstract public Track getTrackOrNull(Model model, Set<Track> tracks);
@@ -190,6 +190,10 @@ public abstract class Entity {
 
     public int getFieldX() {
         return posX / TILE_SIZE;
+    }
+
+    public Position getFieldPosition() {
+        return new Position(getFieldX(), getFieldY());
     }
 
     public int getFieldY() {

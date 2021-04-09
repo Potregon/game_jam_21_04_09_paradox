@@ -20,6 +20,11 @@ public final class Position {
         return y;
     }
 
+    public int euclideanDistance(Position position) {
+        int dx = position.x - x;
+        int dy = position.y - y;
+        return (int) Math.sqrt(dx * dx + dy * dy);
+    }
 
     @Override
     public boolean equals(Object o) {
