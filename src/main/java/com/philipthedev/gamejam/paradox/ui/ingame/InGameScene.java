@@ -1,9 +1,6 @@
 package com.philipthedev.gamejam.paradox.ui.ingame;
 
-import com.philipthedev.gamejam.paradox.model.Entity;
-import com.philipthedev.gamejam.paradox.model.Field;
-import com.philipthedev.gamejam.paradox.model.Model;
-import com.philipthedev.gamejam.paradox.model.PlayerEntity;
+import com.philipthedev.gamejam.paradox.model.*;
 import com.philipthedev.gamejam.paradox.ui.Meta;
 import com.philipthedev.gamejam.paradox.ui.Scene;
 
@@ -16,8 +13,9 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 /**
  * {@link Scene} to show the ingame of a Model.
  */
-public class InGameScene implements Scene{
+public class InGameScene implements Scene {
 
+    private ActionButton selectedActionButton = null;
     private int offsetX, offsetY;
     private final Model model;
 
@@ -62,5 +60,23 @@ public class InGameScene implements Scene{
         }
         meta.clear();
         g.setTransform(outerTransform);
+
+        int actionButtonIndex = 0;
+        int mouseX = meta.getMousePosition().x;
+        int mouseY = meta.getMousePosition().y;
+        for (var actionButton : model.listActionButtons()) {
+            if (meta.isMouseDown() && mouseX > actionButtonIndex * 74 && mouseX <= actionButtonIndex * 74 + 74 && mouseY > meta.getSize().height - 74 && actionButton != selectedActionButton) {
+                if (selectedActionButton != null) {
+                    selectedActionButton.deselected(model);
+                    selectedActionButton = null;
+                }
+                selectedActionButton = actionButton;
+                selectedActionButton.selected(model);
+            }
+            g.translate(10 + actionButtonIndex * 74, meta.getSize().height - 74);
+            actionButton.render(g, 64, imageObserver);
+            g.setTransform(outerTransform);
+            actionButtonIndex++;
+        }
     }
 }

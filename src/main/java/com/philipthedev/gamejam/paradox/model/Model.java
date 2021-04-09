@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public final class Model {
 
@@ -22,6 +23,8 @@ public final class Model {
     private PlayerEntity playerEntity = null;
     private Entity currentEntity = null;
     private int round = 1;
+
+    private final List<ActionButton> actionButtons = new ArrayList<>();
 
     public Model() {
         //load fields
@@ -67,6 +70,9 @@ public final class Model {
             if (entity.isBlockingField(x, y)) {
                 return true;
             }
+        }
+        if (playerEntity != null && playerEntity.isBlockingField(x, y)) {
+            return true;
         }
         return false;
     }
@@ -129,8 +135,35 @@ public final class Model {
         return this.fields[x][y];
     }
 
+    public Field getFieldOrNull(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return null;
+        }
+        else {
+            return fields[x][y];
+        }
+    }
+
     public int getRound() {
         return round;
+    }
+
+    public void addActionButton(ActionButton actionButton) {
+        synchronized (this.actionButtons) {
+            actionButtons.add(actionButton);
+        }
+    }
+
+    public void clearActionButtons() {
+        synchronized (this.actionButtons) {
+            actionButtons.clear();
+        }
+    }
+
+    public List<ActionButton> listActionButtons() {
+        synchronized (this.actionButtons) {
+            return Collections.unmodifiableList(actionButtons);
+        }
     }
 
     private void nextRound() {
@@ -148,6 +181,15 @@ public final class Model {
 
     public PlayerEntity getPlayerEntity() {
         return playerEntity;
+    }
+
+    public Entity getEntityOrNull(int fieldX, int fieldY) {
+        for (var entity : entities) {
+            if (entity.getFieldX() == fieldX && entity.getFieldY() == fieldY) {
+                return entity;
+            }
+        }
+        return null;
     }
 
     private String loadMap() {

@@ -1,5 +1,6 @@
 package com.philipthedev.gamejam.paradox.model;
 
+import com.philipthedev.gamejam.paradox.model.actions.HitAction;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 
 import java.awt.*;
@@ -14,6 +15,8 @@ public class PlayerEntity extends Entity {
     Random random = new Random();
 
     private Track selectedTrack = null;
+    private AttackAction attackAction = null;
+    private AttackPhase attackPhase = AttackPhase.IDLE;
 
     public PlayerEntity(int fieldX, int fieldY) {
         super(fieldX, fieldY);
@@ -39,12 +42,42 @@ public class PlayerEntity extends Entity {
 
     @Override
     public AttackAction getAttackActionOrNull(Model model) {
-        return AttackAction.NEXT_ROUND;
+        switch (attackPhase) {
+            case IDLE:
+                model.addActionButton(new HitAction(this));
+                attackPhase = AttackPhase.SHOW_BUTTONS;
+                break;
+            case SHOW_BUTTONS:
+                AttackAction attackAction = this.attackAction;
+                if (attackAction != null) {
+                    this.attackAction = null;
+                    model.clearActions();
+                    model.clearActionButtons();
+                    attackPhase = AttackPhase.ATTACK_SELECTED;
+                    return attackAction;
+                }
+                break;
+            case ATTACK_SELECTED:
+                attackPhase = AttackPhase.IDLE;
+                return AttackAction.NEXT_ROUND;
+            default:
+                attackPhase = AttackPhase.IDLE;
+                break;
+        }
+        return null;
+    }
+
+    public void setAttackAction(AttackAction attackAction) {
+        this.attackAction = attackAction;
     }
 
     @Override
     public void render(Graphics2D g, ImageObserver observer) {
         g.setColor(Color.YELLOW);
         g.fillOval(getPosX(), getPosY(), TILE_SIZE, TILE_SIZE);
+    }
+
+    private enum AttackPhase {
+        IDLE, SHOW_BUTTONS, ATTACK_SELECTED;
     }
 }
