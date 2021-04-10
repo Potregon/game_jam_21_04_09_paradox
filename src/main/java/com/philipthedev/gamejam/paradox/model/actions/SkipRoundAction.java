@@ -28,7 +28,12 @@ public class SkipRoundAction implements ActionButton {
     }
 
     @Override
-    public void render(Graphics2D g, int tileSize, ImageObserver imageObserver) {
-        g.drawImage(icon, 0, 0, tileSize, tileSize, 0, 0, 32, 32, imageObserver);
+    public void render(Graphics2D g, int tileSize, boolean hovered, ImageObserver imageObserver) {
+        if (hovered) {
+            g.drawImage(icon, 0, 0, tileSize, tileSize, 32, 0, 64, 32, imageObserver);
+        }
+        else {
+            g.drawImage(icon, 0, 0, tileSize, tileSize, 0, 0, 32, 32, imageObserver);
+        }
     }
 }

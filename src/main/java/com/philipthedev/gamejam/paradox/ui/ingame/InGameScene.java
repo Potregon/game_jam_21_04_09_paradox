@@ -107,16 +107,20 @@ public class InGameScene implements Scene {
         int mouseX = meta.getMousePosition().x;
         int mouseY = meta.getMousePosition().y;
         for (var actionButton : model.listActionButtons()) {
-            if (meta.isMouseDown() && mouseX > actionButtonIndex * 74 && mouseX <= actionButtonIndex * 74 + 74 && mouseY > meta.getSize().height - 74 && actionButton != selectedActionButton) {
-                if (selectedActionButton != null) {
-                    selectedActionButton.deselected(model);
-                    selectedActionButton = null;
+            boolean hovered = false;
+            if (mouseX > actionButtonIndex * 74 && mouseX <= actionButtonIndex * 74 + 74 && mouseY > meta.getSize().height - 74 && actionButton != selectedActionButton) {
+                hovered = true;
+                if (meta.isMouseDown()) {
+                    if (selectedActionButton != null) {
+                        selectedActionButton.deselected(model);
+                        selectedActionButton = null;
+                    }
+                    selectedActionButton = actionButton;
+                    selectedActionButton.selected(model);
                 }
-                selectedActionButton = actionButton;
-                selectedActionButton.selected(model);
             }
             g.translate(10 + actionButtonIndex * 74, meta.getSize().height - 74);
-            actionButton.render(g, 64, imageObserver);
+            actionButton.render(g, 64, hovered, imageObserver);
             g.setTransform(outerTransform);
             actionButtonIndex++;
         }

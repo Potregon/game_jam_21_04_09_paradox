@@ -9,6 +9,6 @@ public interface ActionButton {
 
     void deselected(Model model);
 
-    void render(Graphics2D g, int tileSize, ImageObserver imageObserver);
+    void render(Graphics2D g, int tileSize, boolean hovered, ImageObserver imageObserver);
 
 }

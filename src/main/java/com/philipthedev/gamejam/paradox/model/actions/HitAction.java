@@ -40,8 +40,8 @@ public class HitAction implements ActionButton {
     }
 
     @Override
-    public void render(Graphics2D g, int tileSize, ImageObserver imageObserver) {
-        if (selected) {
+    public void render(Graphics2D g, int tileSize, boolean hovered, ImageObserver imageObserver) {
+        if (selected || hovered) {
             g.drawImage(icon, 0, 0, tileSize, tileSize, 32, 0, 64, 32, imageObserver);
         }
         else {
