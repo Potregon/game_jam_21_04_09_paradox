@@ -1,5 +1,6 @@
 package com.philipthedev.gamejam.paradox.model.actions;
 
+import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.*;
 import com.philipthedev.gamejam.paradox.model.attacks.Hit;
 
@@ -11,6 +12,7 @@ public class HitAction implements ActionButton {
 
     private final PlayerEntity provoker;
     boolean selected = false;
+    private static final Image icon = Utils.loadImage(HitAction.class, "hit_action.png");
 
     public HitAction(PlayerEntity provoker) {
         this.provoker = provoker;
@@ -39,8 +41,12 @@ public class HitAction implements ActionButton {
 
     @Override
     public void render(Graphics2D g, int tileSize, ImageObserver imageObserver) {
-        g.setColor(selected ? Color.LIGHT_GRAY : Color.DARK_GRAY);
-        g.fillRect(0, 0, tileSize, tileSize);
+        if (selected) {
+            g.drawImage(icon, 0, 0, tileSize, tileSize, 32, 0, 64, 32, imageObserver);
+        }
+        else {
+            g.drawImage(icon, 0, 0, tileSize, tileSize, 0, 0, 32, 32, imageObserver);
+        }
     }
 
     private void apply(Model model, int x, int y) {

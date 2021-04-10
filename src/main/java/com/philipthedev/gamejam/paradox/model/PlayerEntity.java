@@ -45,6 +45,9 @@ public class PlayerEntity extends Entity {
         switch (attackPhase) {
             case IDLE:
                 model.addActionButton(new HitAction(this));
+                model.addActionButton(new HitAction(this));
+                model.addActionButton(new HitAction(this));
+                model.addActionButton(new HitAction(this));
                 attackPhase = AttackPhase.SHOW_BUTTONS;
                 break;
             case SHOW_BUTTONS:
