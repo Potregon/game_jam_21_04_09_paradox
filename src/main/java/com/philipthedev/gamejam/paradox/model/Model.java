@@ -27,6 +27,9 @@ public final class Model {
     private final List<ActionButton> actionButtons = new ArrayList<>();
     private SpecialAction specialAction = null;
 
+    private Portal startPortal = null;
+    private final List<Portal> portals = new ArrayList<>();
+
     public Model() {
         //load fields
         String map = loadMap();
@@ -58,6 +61,7 @@ public final class Model {
                 }
             }
         }
+        startPortal = new Portal(playerEntity.getFieldX(), playerEntity.getFieldY(), 2);
     }
 
     public boolean isBlocked(int x, int y) {
@@ -73,6 +77,14 @@ public final class Model {
             }
         }
         if (playerEntity != null && playerEntity.isBlockingField(x, y)) {
+            return true;
+        }
+        for (var portal : portals) {
+            if (portal.isBlocked(this, x, y)) {
+                return true;
+            }
+        }
+        if (startPortal.isBlocked(this, x, y)) {
             return true;
         }
         return false;
@@ -130,6 +142,21 @@ public final class Model {
         }
     }
 
+    public void addPortal(Portal portal) {
+        synchronized (portals) {
+            this.portals.add(portal);
+        }
+    }
+
+    public List<Portal> listPortals() {
+        synchronized (portals) {
+            List<Portal> portals = new ArrayList<>(this.portals);
+            portals.add(startPortal);
+            return portals;
+        }
+    }
+
+
     public void clearActions() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -181,10 +208,6 @@ public final class Model {
         }
     }
 
-    public void setRound(int round) {
-        this.round = round;
-    }
-
     public int getMaxRound() {
         return maxRound;
     }
@@ -194,6 +217,16 @@ public final class Model {
     }
 
     private void nextRound() {
+        //update portal preview
+        if (startPortal.getRound() == round) {
+            startPortal.updatePreview(this);
+        }
+        for (var portal : portals) {
+            if (portal.getRound() == round) {
+                portal.updatePreview(this);
+            }
+        }
+        // next round
         if (round >= maxRound) {
             entities.forEach(Entity::reset);
             if (playerEntity != null) {

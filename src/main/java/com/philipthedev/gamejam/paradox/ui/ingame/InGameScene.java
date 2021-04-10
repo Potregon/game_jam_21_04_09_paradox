@@ -62,6 +62,10 @@ public class InGameScene implements Scene {
         if (playerEntity != null) {
             playerEntity.renderAttack(g, imageObserver);
         }
+        // portals
+        for (var portal : model.listPortals()) {
+            portal.render(g, model, imageObserver);
+        }
         //special action
         SpecialAction specialAction = model.getSpecialAction();
         if (specialAction != null) {

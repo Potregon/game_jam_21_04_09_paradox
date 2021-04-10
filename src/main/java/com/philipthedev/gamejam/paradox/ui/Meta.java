@@ -1,5 +1,7 @@
 package com.philipthedev.gamejam.paradox.ui;
 
+import com.philipthedev.gamejam.paradox.model.pathfinding.Position;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -12,6 +14,10 @@ public class Meta {
     private final boolean mouseDown;
 
     private Point offsetMousePosition;
+
+    public Meta() {
+        this(new Dimension(0, 0), new Point(0, 0), false);
+    }
 
     public Meta(Dimension size,
                 Point mousePosition,
