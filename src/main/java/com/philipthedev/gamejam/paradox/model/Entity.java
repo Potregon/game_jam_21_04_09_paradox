@@ -136,6 +136,10 @@ public abstract class Entity {
                             phase = Phase.IDLE;
                             return RoundState.FINISHED;
                         }
+                        else {
+                            currentAttackAction = attackActions.get(nextIndex);
+                            return RoundState.PENDING;
+                        }
                     } else {
                         return RoundState.PENDING;
                     }
@@ -147,6 +151,7 @@ public abstract class Entity {
                         return RoundState.PENDING;
                     }
                     else if (currentAttackAction == AttackAction.NEXT_ROUND) {
+                        savedAttackActions.add(AttackAction.NEXT_ROUND);
                         roundToAction.put(model.getRound(), new ArrayList<>(savedAttackActions));
                         savedAttackActions.clear();
                         currentAttackAction = null;

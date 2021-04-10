@@ -1,6 +1,7 @@
 package com.philipthedev.gamejam.paradox.model;
 
 import com.philipthedev.gamejam.paradox.model.actions.HitAction;
+import com.philipthedev.gamejam.paradox.model.actions.SkipRoundAction;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 
 import java.awt.*;
@@ -45,9 +46,7 @@ public class PlayerEntity extends Entity {
         switch (attackPhase) {
             case IDLE:
                 model.addActionButton(new HitAction(this));
-                model.addActionButton(new HitAction(this));
-                model.addActionButton(new HitAction(this));
-                model.addActionButton(new HitAction(this));
+                model.addActionButton(new SkipRoundAction(this));
                 attackPhase = AttackPhase.SHOW_BUTTONS;
                 break;
             case SHOW_BUTTONS:
@@ -56,7 +55,7 @@ public class PlayerEntity extends Entity {
                     this.attackAction = null;
                     model.clearActions();
                     model.clearActionButtons();
-                    attackPhase = AttackPhase.ATTACK_SELECTED;
+                    attackPhase = attackAction == AttackAction.NEXT_ROUND ? AttackPhase.IDLE : AttackPhase.ATTACK_SELECTED;
                     return attackAction;
                 }
                 break;
