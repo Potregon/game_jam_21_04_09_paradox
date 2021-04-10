@@ -19,6 +19,10 @@ public class Meta {
         this(new Dimension(0, 0), new Point(0, 0), false);
     }
 
+    public Meta(Dimension dimension) {
+        this(dimension, new Point(0, 0), false);
+    }
+
     public Meta(Dimension size,
                 Point mousePosition,
                 boolean mouseDown) {

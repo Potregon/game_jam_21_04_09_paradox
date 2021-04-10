@@ -113,7 +113,7 @@ public final class Model {
                 return;
             }
         }
-        if (entities.isEmpty()) {
+        if (entities.isEmpty() || round > maxRound) {
             return;
         }
         if (currentEntity == null) {
@@ -227,16 +227,15 @@ public final class Model {
             }
         }
         // next round
-        if (round >= maxRound) {
-            entities.forEach(Entity::reset);
-            if (playerEntity != null) {
-                playerEntity.reset();
-            }
-            round = 1;
+        round++;
+    }
+
+    public void reset() {
+        entities.forEach(Entity::reset);
+        if (playerEntity != null) {
+            playerEntity.reset();
         }
-        else {
-            round++;
-        }
+        round = 1;
     }
 
     public PlayerEntity getPlayerEntity() {

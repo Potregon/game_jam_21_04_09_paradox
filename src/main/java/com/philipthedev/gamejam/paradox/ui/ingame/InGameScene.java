@@ -2,6 +2,8 @@ package com.philipthedev.gamejam.paradox.ui.ingame;
 
 import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.*;
+import com.philipthedev.gamejam.paradox.model.pathfinding.Position;
+import com.philipthedev.gamejam.paradox.ui.MainFrame;
 import com.philipthedev.gamejam.paradox.ui.Meta;
 import com.philipthedev.gamejam.paradox.ui.Scene;
 
@@ -21,18 +23,34 @@ public class InGameScene implements Scene {
     private ActionButton selectedActionButton = null;
     private int offsetX, offsetY;
     private final Model model;
+    private final Position positionOrNull;
 
 
     public InGameScene(Model model) {
+        this(model, null);
+    }
+
+    public InGameScene(Model model, Position positionOrNull) {
         this.model = model;
+        this.positionOrNull = positionOrNull;
     }
 
 
     @Override
     public void render(Graphics2D g, Meta meta, ImageObserver imageObserver) {
+        if (model.getRound() > model.getMaxRound()) {
+            MainFrame.get().setScene(new ChoosePortalScene(model, InGameScene::new));
+            return;
+        }
         PlayerEntity playerEntity = model.getPlayerEntity();
-        model.calculateModel();
-        if (playerEntity != null) {
+        if (positionOrNull == null) {
+            model.calculateModel();
+        }
+        if (positionOrNull != null) {
+            offsetX = positionOrNull.getX() + TILE_SIZE / 2;
+            offsetY = positionOrNull.getY() + TILE_SIZE / 2;
+        }
+        else if (playerEntity != null) {
             offsetX = playerEntity.getPosX() + TILE_SIZE / 2;
             offsetY = playerEntity.getPosY() + TILE_SIZE / 2;
         }

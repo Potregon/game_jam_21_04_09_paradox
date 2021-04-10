@@ -1,7 +1,9 @@
 package com.philipthedev.gamejam.paradox.model;
 
+import com.philipthedev.gamejam.paradox.model.pathfinding.Position;
 import com.philipthedev.gamejam.paradox.ui.MainFrame;
 import com.philipthedev.gamejam.paradox.ui.Meta;
+import com.philipthedev.gamejam.paradox.ui.ingame.InGameScene;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -53,33 +55,14 @@ public final class Portal {
     }
 
     public void updatePreview(Model model) {
-        preview = new BufferedImage(TILE_SIZE * 7, TILE_SIZE * 7, BufferedImage.TYPE_INT_ARGB);
+        preview = new BufferedImage(TILE_SIZE * 11, TILE_SIZE * 11, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = preview.createGraphics();
-        AffineTransform transform = g.getTransform();
-        int previewX = 0;
-        int previewY = 0;
-        for (int x = fieldX - 2; x < fieldX + 3; x++) {
-            for (int y = fieldY - 2; y < fieldY + 3; y++) {
-                Field field = model.getFieldOrNull(x, y);
-                if (field == null) {
-                    previewY += TILE_SIZE;
-                    continue;
-                }
-                g.translate(previewX, previewY);
-                field.render(g, new Meta(), MainFrame.get());
-                g.setTransform(transform);
-                Entity entity = model.getEntityOrNull(x, y);
-                if (entity != null) {
-                    g.translate(- x*TILE_SIZE, - y * TILE_SIZE);
-                    entity.render(g, MainFrame.get());
-                    g.setTransform(transform);
-                }
-                previewY += TILE_SIZE;
-            }
-            previewX += TILE_SIZE;
-            previewY = 0;
-        }
+        InGameScene inGameScene = new InGameScene(model, new Position(fieldX * TILE_SIZE, fieldY * TILE_SIZE));
+        inGameScene.render(g, new Meta(new Dimension(preview.getWidth(), preview.getHeight())), MainFrame.get());
         g.dispose();
     }
 
+    public BufferedImage getPreview() {
+        return preview;
+    }
 }
