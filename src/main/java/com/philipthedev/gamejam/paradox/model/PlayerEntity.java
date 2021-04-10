@@ -1,5 +1,6 @@
 package com.philipthedev.gamejam.paradox.model;
 
+import com.philipthedev.gamejam.paradox.model.actions.ConsumeTimeSplitter;
 import com.philipthedev.gamejam.paradox.model.actions.HitAction;
 import com.philipthedev.gamejam.paradox.model.actions.SkipRoundAction;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
@@ -49,6 +50,9 @@ public class PlayerEntity extends Entity {
         switch (attackPhase) {
             case IDLE:
                 model.addActionButton(new HitAction(this));
+                if (this.getTimeSplitter() > 0) {
+                    model.addActionButton(new ConsumeTimeSplitter(this));
+                }
                 model.addActionButton(new SkipRoundAction(this));
                 attackPhase = AttackPhase.SHOW_BUTTONS;
                 break;

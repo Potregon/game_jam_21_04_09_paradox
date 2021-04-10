@@ -16,6 +16,7 @@ public class GhostPlayerEntity extends Entity {
 
     @Override
     public Track getTrackOrNull(Model model, Set<Track> tracks) {
+        dispose();
         return null;
     }
 

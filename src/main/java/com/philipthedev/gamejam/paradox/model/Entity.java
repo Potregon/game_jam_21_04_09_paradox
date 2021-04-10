@@ -102,6 +102,11 @@ public abstract class Entity {
                     }
                     else {
                         this.currentTrack = getTrackOrNull(model, tracks);
+                        if (disposed) {
+                            this.currentTrack = null;
+                            phase = Phase.IDLE;
+                            return RoundState.FINISHED;
+                        }
                         if (currentTrack == null) {
                             return RoundState.PENDING;
                         }
