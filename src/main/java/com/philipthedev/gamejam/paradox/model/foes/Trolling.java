@@ -20,7 +20,7 @@ public class Trolling extends Entity {
     private int actionPoints = 1;
 
     public Trolling(int fieldX, int fieldY) {
-        super(fieldX, fieldY, 1, 3, 0);
+        super(fieldX, fieldY, 1, 3, 0, 1);
     }
 
     @Override

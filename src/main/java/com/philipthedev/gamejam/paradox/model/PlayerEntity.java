@@ -19,8 +19,8 @@ public class PlayerEntity extends Entity {
     private AttackAction attackAction = null;
     private AttackPhase attackPhase = AttackPhase.IDLE;
 
-    public PlayerEntity(int fieldX, int fieldY) {
-        super(fieldX, fieldY, 50, 5, 0);
+    public PlayerEntity(int fieldX, int fieldY, int startRound) {
+        super(fieldX, fieldY, 50, 5, 0, startRound);
     }
 
     @Override
@@ -75,8 +75,10 @@ public class PlayerEntity extends Entity {
 
     @Override
     public void render(Graphics2D g, ImageObserver observer) {
-        g.setColor(Color.YELLOW);
-        g.fillOval(getPosX(), getPosY(), TILE_SIZE, TILE_SIZE);
+        if (isArrived()) {
+            g.setColor(Color.YELLOW);
+            g.fillOval(getPosX(), getPosY(), TILE_SIZE, TILE_SIZE);
+        }
     }
 
     @Override

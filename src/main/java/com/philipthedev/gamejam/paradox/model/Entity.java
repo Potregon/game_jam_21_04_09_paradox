@@ -21,6 +21,7 @@ public abstract class Entity {
     private final int startHP;
     private final int startRange;
     private final int startTimeSplitter;
+    private final int startRound;
 
     private int posX = 0;
     private int posY = 0;
@@ -36,15 +37,18 @@ public abstract class Entity {
     private Position moveToPosition = null;
     private final List<AttackAction> savedAttackActions = new ArrayList<>();
     private AttackAction currentAttackAction = null;
+    private boolean arrived;
 
     public Entity(int fieldX, int fieldY,
                   int startHP,
-                  int startRange, int startTimeSplitter) {
+                  int startRange, int startTimeSplitter,
+                  int startRound) {
         this.startPosX = fieldX * TILE_SIZE;
         this.startPosY = fieldY * TILE_SIZE;
         this.startHP = startHP;
         this.startRange = startRange;
         this.startTimeSplitter = startTimeSplitter;
+        this.startRound = startRound;
         reset();
     }
 
@@ -55,6 +59,11 @@ public abstract class Entity {
      * @return {@link RoundState#FINISHED} or {@link RoundState#PENDING}
      */
     RoundState calculateRound(Model model) {
+        if (startRound > model.getMaxRound()) {
+            this.arrived = false;
+            return RoundState.FINISHED;
+        }
+        arrived = true;
         if (hP <= 0) {
             return RoundState.FINISHED;
         }
@@ -198,6 +207,10 @@ public abstract class Entity {
         return hP <= 0;
     }
 
+    public boolean isArrived() {
+        return arrived;
+    }
+
     public void sethP(int hP) {
         this.hP = hP;
     }
@@ -260,8 +273,12 @@ public abstract class Entity {
         return posY / TILE_SIZE;
     }
 
-    public boolean isBlockingField(int x, int y) {
-        return !isKilled() && phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
+    public int getStartRound() {
+        return startRound;
+    }
+
+    public boolean isBlockingField(Model model, int x, int y) {
+        return !isKilled() && startRound <= model.getRound() && phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
     }
 
     public enum RoundState {

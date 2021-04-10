@@ -49,7 +49,7 @@ public final class Model {
                         break;
                     case 'p':
                         fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
-                        playerEntity = new PlayerEntity(x, y);
+                        playerEntity = new PlayerEntity(x, y, 1);
                         break;
                     case 't':
                         fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
@@ -72,11 +72,11 @@ public final class Model {
             return true;
         }
         for (var entity : entities) {
-            if (entity.isBlockingField(x, y)) {
+            if (entity.isBlockingField(this, x, y)) {
                 return true;
             }
         }
-        if (playerEntity != null && playerEntity.isBlockingField(x, y)) {
+        if (playerEntity != null && playerEntity.isBlockingField(this, x, y)) {
             return true;
         }
         for (var portal : portals) {
