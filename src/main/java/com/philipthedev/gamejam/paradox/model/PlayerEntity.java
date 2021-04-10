@@ -22,6 +22,9 @@ public class PlayerEntity extends Entity {
     public PlayerEntity(int fieldX, int fieldY, int startRound) {
         super(fieldX, fieldY, 50, 5, 0, startRound);
     }
+    public PlayerEntity(PlayerEntity original, int fieldX, int fieldY, int round) {
+        super(fieldX, fieldY, 50, original.getRange(), original.getTimeSplitter(), round);
+    }
 
     @Override
     public Track getTrackOrNull(Model model, Set<Track> tracks) {
@@ -75,7 +78,7 @@ public class PlayerEntity extends Entity {
 
     @Override
     public void render(Graphics2D g, ImageObserver observer) {
-        if (isArrived()) {
+        if (isVisible()) {
             g.setColor(Color.YELLOW);
             g.fillOval(getPosX(), getPosY(), TILE_SIZE, TILE_SIZE);
         }

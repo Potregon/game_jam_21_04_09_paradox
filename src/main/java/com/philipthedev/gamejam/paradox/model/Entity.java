@@ -38,6 +38,7 @@ public abstract class Entity {
     private final List<AttackAction> savedAttackActions = new ArrayList<>();
     private AttackAction currentAttackAction = null;
     private boolean arrived;
+    private boolean disposed = false;
 
     public Entity(int fieldX, int fieldY,
                   int startHP,
@@ -52,6 +53,22 @@ public abstract class Entity {
         reset();
     }
 
+    /**
+     * Copy constructor
+     * @param origin original
+     */
+    public Entity(Entity origin) {
+        this.startPosX = origin.startPosX;
+        this.startPosY = origin.startPosY;
+        this.startHP = origin.startHP;
+        this.startRange = origin.startRange;
+        this.startTimeSplitter = origin.startTimeSplitter;
+        this.startRound = origin.startRound;
+        this.roundToAction = origin.roundToAction;
+        this.roundToTrack = origin.roundToTrack;
+        reset();
+    }
+
 
     /**
      * Is called each round. Returns {@link RoundState#FINISHED} if its round is finished. {@link RoundState#PENDING} otherwise.
@@ -59,7 +76,7 @@ public abstract class Entity {
      * @return {@link RoundState#FINISHED} or {@link RoundState#PENDING}
      */
     RoundState calculateRound(Model model) {
-        if (startRound > model.getMaxRound()) {
+        if (startRound > model.getRound()) {
             this.arrived = false;
             return RoundState.FINISHED;
         }
@@ -207,12 +224,16 @@ public abstract class Entity {
         return hP <= 0;
     }
 
-    public boolean isArrived() {
-        return arrived;
+    public boolean isVisible() {
+        return arrived && !disposed && hP > 0;
     }
 
-    public void sethP(int hP) {
+    public void setHP(int hP) {
         this.hP = hP;
+    }
+
+    public void dispose() {
+        disposed = true;
     }
 
     void reset() {
@@ -221,6 +242,7 @@ public abstract class Entity {
         hP = startHP;
         range = startRange;
         timeSplitter = startTimeSplitter;
+        disposed = false;
         phase = Phase.IDLE;
     }
 
@@ -278,7 +300,7 @@ public abstract class Entity {
     }
 
     public boolean isBlockingField(Model model, int x, int y) {
-        return !isKilled() && startRound <= model.getRound() && phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
+        return isVisible() && startRound <= model.getRound() && phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
     }
 
     public enum RoundState {

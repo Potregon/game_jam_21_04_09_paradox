@@ -2,6 +2,7 @@ package com.philipthedev.gamejam.paradox.ui.ingame;
 
 import com.philipthedev.gamejam.paradox.model.Model;
 import com.philipthedev.gamejam.paradox.model.Portal;
+import com.philipthedev.gamejam.paradox.ui.MainFrame;
 import com.philipthedev.gamejam.paradox.ui.Meta;
 import com.philipthedev.gamejam.paradox.ui.Scene;
 
@@ -38,5 +39,23 @@ public class ChoosePortalScene implements Scene {
         Portal portal = portalList.get(selectIndex);
         BufferedImage image = portal.getPreview();
         g.drawImage(image, meta.getSize().width / 2 - image.getWidth() / 2, 50, imageObserver);
+
+        int buttonBarY = meta.getSize().height - 40;
+        int enterButtonX = meta.getSize().width / 2 - 50;
+        int mouseX = meta.getMousePosition().x;
+        int mouseY = meta.getMousePosition().y;
+        if (mouseX >= enterButtonX && mouseX < enterButtonX + 100 && mouseY >= buttonBarY) {
+            g.setColor(Color.YELLOW);
+            g.fillRect(enterButtonX, buttonBarY, 100, 32);
+            if (meta.isMouseDown()) {
+                model.enterPortal(portal);
+                model.reset();
+                MainFrame.get().setScene(sceneSupplier.apply(model));
+            }
+        }
+        else {
+            g.setColor(Color.ORANGE);
+            g.fillRect(enterButtonX, buttonBarY, 100, 32);
+        }
     }
 }

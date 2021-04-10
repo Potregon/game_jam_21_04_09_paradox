@@ -64,6 +64,18 @@ public final class Model {
         startPortal = new Portal(playerEntity.getFieldX(), playerEntity.getFieldY(), 2);
     }
 
+    public void enterPortal(Portal portal) {
+        if (portal == startPortal) {
+            startPortal = new Portal(startPortal.getFieldX(), startPortal.getFieldY(), startPortal.getRound() + 1);
+        }
+        else {
+            portals.remove(portal);
+        }
+        GhostPlayerEntity ghostPlayerEntity = new GhostPlayerEntity(playerEntity);
+        entities.add(ghostPlayerEntity);
+        playerEntity = new PlayerEntity(playerEntity, portal.getFieldX(), portal.getFieldY(), portal.getRound());
+    }
+
     public boolean isBlocked(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return true;
