@@ -18,10 +18,15 @@ public abstract class Entity {
 
     private final int startPosX;
     private final int startPosY;
+    private final int startHP;
+    private final int startRange;
+    private final int startTimeSplitter;
 
     private int posX = 0;
     private int posY = 0;
+    private int hP   = 0;
     private int range = 5;
+    private int timeSplitter = 0;
 
     private Phase phase = Phase.IDLE;
     private Map<Integer, Track> roundToTrack = new HashMap<>();
@@ -32,11 +37,15 @@ public abstract class Entity {
     private final List<AttackAction> savedAttackActions = new ArrayList<>();
     private AttackAction currentAttackAction = null;
 
-    public Entity(int fieldX, int fieldY) {
-        posX = fieldX * TILE_SIZE;
-        posY = fieldY * TILE_SIZE;
-        this.startPosX = posX;
-        this.startPosY = posY;
+    public Entity(int fieldX, int fieldY,
+                  int startHP,
+                  int startRange, int startTimeSplitter) {
+        this.startPosX = fieldX * TILE_SIZE;
+        this.startPosY = fieldY * TILE_SIZE;
+        this.startHP = startHP;
+        this.startRange = startRange;
+        this.startTimeSplitter = startTimeSplitter;
+        reset();
     }
 
 
@@ -46,6 +55,9 @@ public abstract class Entity {
      * @return {@link RoundState#FINISHED} or {@link RoundState#PENDING}
      */
     RoundState calculateRound(Model model) {
+        if (hP <= 0) {
+            return RoundState.FINISHED;
+        }
         if (phase == Phase.IDLE) {
             phase = Phase.MOVEMENT;
         }
@@ -157,10 +169,51 @@ public abstract class Entity {
         throw new IllegalStateException("Something went wrong in Entity. Phase was: " + phase.toString());
     };
 
+    public int getRange() {
+        return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+    }
+
+    public int getTimeSplitter() {
+        return timeSplitter;
+    }
+
+    public void setTimeSplitter(int timeSplitter) {
+        this.timeSplitter = timeSplitter;
+    }
+
+    public int getHP() {
+        return hP;
+    }
+
+    public boolean isKilled() {
+        return hP <= 0;
+    }
+
+    public void sethP(int hP) {
+        this.hP = hP;
+    }
+
     void reset() {
-        this.posX = startPosX;
-        this.posY = startPosY;
-        this.phase = Phase.IDLE;
+        posX = startPosX;
+        posY = startPosY;
+        hP = startHP;
+        range = startRange;
+        timeSplitter = startTimeSplitter;
+        phase = Phase.IDLE;
+    }
+
+    public void damage(Entity aggressor, DamageType damageType, int damage, Model model) {
+        if (hP <= 0) {
+            return;
+        }
+        hP-= damage;
+        if (hP <= 0) {
+            killedBy(aggressor, model);
+        }
     }
 
     abstract public Track getTrackOrNull(Model model, Set<Track> tracks);
@@ -172,6 +225,8 @@ public abstract class Entity {
     abstract public AttackAction getAttackActionOrNull(Model model);
 
     abstract public void render(Graphics2D g, ImageObserver observer);
+
+    abstract public void killedBy(Entity killer, Model model);
 
     public void renderAttack(Graphics2D g, ImageObserver observer) {
         if (currentAttackAction != null) {
@@ -201,7 +256,7 @@ public abstract class Entity {
     }
 
     public boolean isBlockingField(int x, int y) {
-        return phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
+        return !isKilled() && phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
     }
 
     public enum RoundState {

@@ -1,6 +1,7 @@
 package com.philipthedev.gamejam.paradox.model.attacks;
 
 import com.philipthedev.gamejam.paradox.model.AttackAction;
+import com.philipthedev.gamejam.paradox.model.DamageType;
 import com.philipthedev.gamejam.paradox.model.Entity;
 import com.philipthedev.gamejam.paradox.model.Model;
 
@@ -23,6 +24,7 @@ public class Hit implements AttackAction {
         step++;
         if (step > 5) {
             step = 0;
+            target.damage(entity, DamageType.MUNDANE, 1, model);
             return true;
         }
         else {

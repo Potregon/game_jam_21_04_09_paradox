@@ -25,6 +25,7 @@ public final class Model {
     private int round = 1;
 
     private final List<ActionButton> actionButtons = new ArrayList<>();
+    private SpecialAction specialAction = null;
 
     public Model() {
         //load fields
@@ -85,7 +86,21 @@ public final class Model {
         return currentEntity;
     }
 
+    public void setSpecialAction(SpecialAction specialAction) {
+        this.specialAction = specialAction;
+    }
+
+    public SpecialAction getSpecialAction() {
+        return specialAction;
+    }
+
     public void calculateModel() {
+        if (specialAction != null) {
+            specialAction.doAction(this);
+            if (specialAction != null) {
+                return;
+            }
+        }
         if (entities.isEmpty()) {
             return;
         }
@@ -206,5 +221,4 @@ public final class Model {
         }
         return result;
     }
-
 }

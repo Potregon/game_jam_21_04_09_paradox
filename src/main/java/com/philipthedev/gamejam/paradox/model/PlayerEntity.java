@@ -19,7 +19,7 @@ public class PlayerEntity extends Entity {
     private AttackPhase attackPhase = AttackPhase.IDLE;
 
     public PlayerEntity(int fieldX, int fieldY) {
-        super(fieldX, fieldY);
+        super(fieldX, fieldY, 50, 5, 0);
     }
 
     @Override
@@ -75,6 +75,11 @@ public class PlayerEntity extends Entity {
     public void render(Graphics2D g, ImageObserver observer) {
         g.setColor(Color.YELLOW);
         g.fillOval(getPosX(), getPosY(), TILE_SIZE, TILE_SIZE);
+    }
+
+    @Override
+    public void killedBy(Entity killer, Model model) {
+
     }
 
     private enum AttackPhase {

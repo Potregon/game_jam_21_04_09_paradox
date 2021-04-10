@@ -7,6 +7,7 @@ import com.philipthedev.gamejam.paradox.model.PlayerEntity;
 import com.philipthedev.gamejam.paradox.model.attacks.Hit;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Position;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
+import com.philipthedev.gamejam.paradox.model.special.GetTimeSplitterAction;
 
 import java.awt.*;
 import java.awt.image.ImageObserver;
@@ -19,7 +20,7 @@ public class Trolling extends Entity {
     private int actionPoints = 1;
 
     public Trolling(int fieldX, int fieldY) {
-        super(fieldX, fieldY);
+        super(fieldX, fieldY, 1, 3, 0);
     }
 
     @Override
@@ -45,8 +46,17 @@ public class Trolling extends Entity {
 
     @Override
     public void render(Graphics2D g, ImageObserver observer) {
-        g.setColor(Color.RED);
-        g.fillRect(getPosX() + 8, getPosY() + 8, TILE_SIZE - 16, TILE_SIZE - 16);
+        if (!isKilled()) {
+            g.setColor(Color.RED);
+            g.fillRect(getPosX() + 8, getPosY() + 8, TILE_SIZE - 16, TILE_SIZE - 16);
+        }
+    }
+
+    @Override
+    public void killedBy(Entity killer, Model model) {
+        if (killer instanceof PlayerEntity) {
+            model.setSpecialAction(new GetTimeSplitterAction(this, killer));
+        }
     }
 
     @Override
