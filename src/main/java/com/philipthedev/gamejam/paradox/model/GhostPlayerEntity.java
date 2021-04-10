@@ -27,6 +27,11 @@ public class GhostPlayerEntity extends Entity {
     }
 
     @Override
+    public void damage(Entity aggressor, DamageType damageType, int damage, Model model) {
+        model.getPlayerEntity().delegateDamage(damage);
+    }
+
+    @Override
     public void render(Graphics2D g, ImageObserver observer) {
         if (isVisible()) {
             g.setColor(Color.YELLOW);

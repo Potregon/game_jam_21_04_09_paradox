@@ -19,6 +19,7 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 public class InGameScene implements Scene {
 
     private static final Image clockIcon = Utils.loadImage(InGameScene.class, "clock.png");
+    private static final Image hpBar = Utils.loadImage(InGameScene.class, "HP-Bar.png");
 
     private ActionButton selectedActionButton = null;
     private int offsetX, offsetY;
@@ -102,6 +103,14 @@ public class InGameScene implements Scene {
                 g.drawImage(clockIcon, clockIndex * 32, 0, clockIndex * 32 + 32, 32, 0, 0, 32, 32,imageObserver);
             }
         }
+
+        //hp
+        g.setColor(Color.RED);
+        g.fillRect(44, 40, 100, 32);
+        int liveWidth = playerEntity.getHP() * 100 / playerEntity.getMaxHP();
+        g.setColor(Color.GREEN);
+        g.fillRect(44, 40, liveWidth, 32);
+        g.drawImage(hpBar, 0, 40, imageObserver);
 
         int actionButtonIndex = 0;
         int mouseX = meta.getMousePosition().x;

@@ -66,7 +66,7 @@ public class Trolling extends Entity {
             Position position = playerEntity.getFieldPosition();
             if (position.euclideanDistance(getFieldPosition()) <= 1) {
                 actionPoints--;
-                return new Hit(playerEntity);
+                return new Hit(playerEntity.getFieldPosition());
             }
         }
         actionPoints = 1;

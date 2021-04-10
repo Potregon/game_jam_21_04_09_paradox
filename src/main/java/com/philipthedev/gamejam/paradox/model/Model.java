@@ -256,9 +256,12 @@ public final class Model {
 
     public Entity getEntityOrNull(int fieldX, int fieldY) {
         for (var entity : entities) {
-            if (entity.getFieldX() == fieldX && entity.getFieldY() == fieldY) {
+            if (entity.isVisible() && entity.getFieldX() == fieldX && entity.getFieldY() == fieldY) {
                 return entity;
             }
+        }
+        if (playerEntity.getFieldX() == fieldX && playerEntity.getFieldY() == fieldY) {
+            return playerEntity;
         }
         return null;
     }

@@ -308,6 +308,14 @@ public abstract class Entity {
         return isVisible() && startRound <= model.getRound() && phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
     }
 
+    public int getMaxHP() {
+        return startHP;
+    }
+
+    protected void delegateDamage(int damage) {
+        this.hP -= damage;
+    }
+
     public enum RoundState {
         PENDING, FINISHED;
     }

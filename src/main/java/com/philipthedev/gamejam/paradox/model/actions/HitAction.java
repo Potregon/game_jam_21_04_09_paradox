@@ -60,7 +60,7 @@ public class HitAction implements ActionButton {
         }
         else {
             field.setFieldAction(new FieldAction(new Color(0, 255, 0, 50), new Color(0, 255, 0, 250), () -> {
-                provoker.setAttackAction(new Hit(entity));
+                provoker.setAttackAction(new Hit(entity.getFieldPosition()));
             }));
         }
     }
