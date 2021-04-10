@@ -1,5 +1,6 @@
 package com.philipthedev.gamejam.paradox.ui.ingame;
 
+import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.*;
 import com.philipthedev.gamejam.paradox.ui.Meta;
 import com.philipthedev.gamejam.paradox.ui.Scene;
@@ -15,9 +16,12 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
  */
 public class InGameScene implements Scene {
 
+    private static final Image clockIcon = Utils.loadImage(InGameScene.class, "clock.png");
+
     private ActionButton selectedActionButton = null;
     private int offsetX, offsetY;
     private final Model model;
+
 
     public InGameScene(Model model) {
         this.model = model;
@@ -65,6 +69,17 @@ public class InGameScene implements Scene {
         }
         meta.clear();
         g.setTransform(outerTransform);
+
+        //timer
+        for (int clockIndex = 0; clockIndex < model.getMaxRound(); clockIndex++) {
+            int availableRounds = model.getMaxRound() - model.getRound();
+            if (clockIndex > availableRounds) {
+                g.drawImage(clockIcon, clockIndex * 32, 0, clockIndex * 32 + 32, 32, 32, 0, 64, 32, imageObserver);
+            }
+            else {
+                g.drawImage(clockIcon, clockIndex * 32, 0, clockIndex * 32 + 32, 32, 0, 0, 32, 32,imageObserver);
+            }
+        }
 
         int actionButtonIndex = 0;
         int mouseX = meta.getMousePosition().x;

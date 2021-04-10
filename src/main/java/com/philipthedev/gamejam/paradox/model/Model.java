@@ -22,6 +22,7 @@ public final class Model {
     private PlayerEntity playerEntity = null;
     private Entity currentEntity = null;
     private int round = 1;
+    private int maxRound = 3;
 
     private final List<ActionButton> actionButtons = new ArrayList<>();
     private SpecialAction specialAction = null;
@@ -180,8 +181,20 @@ public final class Model {
         }
     }
 
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public int getMaxRound() {
+        return maxRound;
+    }
+
+    public void setMaxRound(int maxRound) {
+        this.maxRound = maxRound;
+    }
+
     private void nextRound() {
-        if (round >= 3) {
+        if (round >= maxRound) {
             entities.forEach(Entity::reset);
             if (playerEntity != null) {
                 playerEntity.reset();
