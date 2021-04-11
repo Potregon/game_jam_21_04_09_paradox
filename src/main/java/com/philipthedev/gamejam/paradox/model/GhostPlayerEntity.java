@@ -38,7 +38,9 @@ public class GhostPlayerEntity extends Entity {
     @Override
     public void render(Graphics2D g, ImageObserver observer) {
         if (isVisible()) {
-            g.drawImage(playerImage, getPosX(), getPosY(), getPosX() + TILE_SIZE, getPosY() + TILE_SIZE, 0, 0, playerImage.getWidth(), playerImage.getHeight(), observer);
+            int x = getPosX();
+            int y = getPosY() - TILE_SIZE / 4 - 16;
+            g.drawImage(playerImage, x, y, x + TILE_SIZE, y + TILE_SIZE + 16, 0, 0, playerImage.getWidth(), playerImage.getHeight(), observer);
         }
     }
 

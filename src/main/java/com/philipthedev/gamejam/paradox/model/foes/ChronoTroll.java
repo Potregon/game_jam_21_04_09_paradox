@@ -1,5 +1,6 @@
 package com.philipthedev.gamejam.paradox.model.foes;
 
+import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.AttackAction;
 import com.philipthedev.gamejam.paradox.model.Entity;
 import com.philipthedev.gamejam.paradox.model.Model;
@@ -10,16 +11,18 @@ import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 import com.philipthedev.gamejam.paradox.model.special.GetTimeSplitterAction;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.util.Set;
 
 import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 
-public class Trolling extends Entity {
+public class ChronoTroll extends Entity {
 
+    private final static BufferedImage image = Utils.loadImage(ChronoTroll.class, "chronotroll.png");
     private int actionPoints = 1;
 
-    public Trolling(int fieldX, int fieldY) {
+    public ChronoTroll(int fieldX, int fieldY) {
         super(fieldX, fieldY, 1, 3, 0, 1);
     }
 
@@ -47,8 +50,9 @@ public class Trolling extends Entity {
     @Override
     public void render(Graphics2D g, ImageObserver observer) {
         if (!isKilled()) {
-            g.setColor(Color.RED);
-            g.fillRect(getPosX() + 8, getPosY() + 8, TILE_SIZE - 16, TILE_SIZE - 16);
+            int x = getPosX();
+            int y = getPosY() - TILE_SIZE / 4;
+            g.drawImage(image, x, y, x + TILE_SIZE, y + TILE_SIZE, 0, 0, image.getWidth(), image.getHeight(), observer);
         }
     }
 

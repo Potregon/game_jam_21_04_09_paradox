@@ -3,7 +3,7 @@ package com.philipthedev.gamejam.paradox.model;
 import com.philipthedev.gamejam.paradox.model.field.Field;
 import com.philipthedev.gamejam.paradox.model.field.PassableField;
 import com.philipthedev.gamejam.paradox.model.field.WallField;
-import com.philipthedev.gamejam.paradox.model.foes.Trolling;
+import com.philipthedev.gamejam.paradox.model.foes.ChronoTroll;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -56,7 +56,7 @@ public final class Model {
                         break;
                     case 't':
                         fields[x][y] = new PassableField(x, y);
-                        entities.add(new Trolling(x, y));
+                        entities.add(new ChronoTroll(x, y));
                         break;
                     default:
                         fields[x][y] = new PassableField(x, y);
