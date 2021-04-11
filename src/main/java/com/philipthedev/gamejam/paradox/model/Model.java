@@ -105,7 +105,7 @@ public final class Model {
                 return true;
             }
         }
-        if (startPortal.isBlocked(this, x, y)) {
+        if (startPortal != null && startPortal.isBlocked(this, x, y)) {
             return true;
         }
         return false;
@@ -125,6 +125,20 @@ public final class Model {
 
     public SpecialAction getSpecialAction() {
         return specialAction;
+    }
+
+    public void calculateLight() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                final Entity entityOrNull = getEntityOrNull(x, y);
+                if (entityOrNull != null) {
+                    fields[x][y].setLightSource(entityOrNull.getRedSource(), entityOrNull.getGreenSource(), entityOrNull.getBlueSource());
+                }
+                else {
+                    fields[x][y].setLightSource(0, 0, 0);
+                }
+            }
+        }
     }
 
     public void calculateModel() {

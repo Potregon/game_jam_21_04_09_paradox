@@ -26,6 +26,7 @@ public class PassableField extends Field {
 
     @Override
     public void validate(Model model) {
+        super.validate(model);
         boolean northWest = model.getFieldOrNull(x - 1, y - 1) instanceof PassableField;
         boolean north = model.getFieldOrNull(x, y - 1) instanceof PassableField;
         boolean northEast = model.getFieldOrNull(x + 1, y - 1) instanceof PassableField;

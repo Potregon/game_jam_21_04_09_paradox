@@ -24,9 +24,12 @@ public class PlayerEntity extends Entity {
 
     public PlayerEntity(int fieldX, int fieldY, int startRound) {
         super(fieldX, fieldY, 50, 5, 0, startRound);
+        setLightSource(100, 90, 90);
     }
+
     public PlayerEntity(PlayerEntity original, int fieldX, int fieldY, int round) {
         super(fieldX, fieldY, 50, original.getRange(), original.getTimeSplitter(), round);
+        setLightSource(100, 90, 90);
     }
 
     @Override

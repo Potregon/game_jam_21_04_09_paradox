@@ -29,6 +29,10 @@ public abstract class Entity {
     private int range = 5;
     private int timeSplitter = 0;
 
+    private int redSource = 0;
+    private int greenSource = 0;
+    private int blueSource = 0;
+
     private Phase phase = Phase.IDLE;
     private Map<Integer, Track> roundToTrack = new HashMap<>();
     private Map<Integer, List<AttackAction>> roundToAction = new HashMap<>();
@@ -279,6 +283,23 @@ public abstract class Entity {
         }
     }
 
+    public void setLightSource(int red, int green, int blue) {
+        this.redSource = red;
+        this.greenSource = green;
+        this.blueSource = blue;
+    }
+
+    public int getRedSource() {
+        return redSource;
+    }
+
+    public int getGreenSource() {
+        return greenSource;
+    }
+
+    public int getBlueSource() {
+        return blueSource;
+    }
 
     public int getPosX() {
         return posX;
