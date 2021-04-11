@@ -1,5 +1,8 @@
 package com.philipthedev.gamejam.paradox.model;
 
+import com.philipthedev.gamejam.paradox.model.field.Field;
+import com.philipthedev.gamejam.paradox.model.field.PassableField;
+import com.philipthedev.gamejam.paradox.model.field.WallField;
 import com.philipthedev.gamejam.paradox.model.foes.Trolling;
 
 import java.io.BufferedInputStream;
@@ -45,20 +48,26 @@ public final class Model {
                 char cell = row.charAt(x);
                 switch (cell) {
                     case 'W':
-                        fields[x][y] = new Field(Field.FieldType.SOLID, x, y);
+                        fields[x][y] = new WallField(x, y);
                         break;
                     case 'p':
-                        fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
+                        fields[x][y] = new PassableField(x, y);
                         playerEntity = new PlayerEntity(x, y, 1);
                         break;
                     case 't':
-                        fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
+                        fields[x][y] = new PassableField(x, y);
                         entities.add(new Trolling(x, y));
                         break;
                     default:
-                        fields[x][y] = new Field(Field.FieldType.PASSABLE, x, y);
+                        fields[x][y] = new PassableField(x, y);
                         break;
                 }
+            }
+        }
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                fields[x][y].validate(this);
             }
         }
         startPortal = new Portal(playerEntity.getFieldX(), playerEntity.getFieldY(), 2);

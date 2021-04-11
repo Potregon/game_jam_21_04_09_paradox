@@ -3,6 +3,7 @@ package com.philipthedev.gamejam.paradox.model.actions;
 import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.*;
 import com.philipthedev.gamejam.paradox.model.attacks.Hit;
+import com.philipthedev.gamejam.paradox.model.field.Field;
 
 import java.awt.*;
 import java.awt.image.ImageObserver;

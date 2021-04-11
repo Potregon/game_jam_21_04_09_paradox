@@ -3,6 +3,7 @@ package com.philipthedev.gamejam.paradox.model;
 import com.philipthedev.gamejam.paradox.model.actions.ConsumeTimeSplitter;
 import com.philipthedev.gamejam.paradox.model.actions.HitAction;
 import com.philipthedev.gamejam.paradox.model.actions.SkipRoundAction;
+import com.philipthedev.gamejam.paradox.model.field.Field;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 
 import java.awt.*;
