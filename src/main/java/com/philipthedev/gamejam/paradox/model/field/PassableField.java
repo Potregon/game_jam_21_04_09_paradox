@@ -12,7 +12,8 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 
 public class PassableField extends Field {
 
-    private static final StreetMapImage mapImage = new StreetMapImage(Utils.loadImage(PassableField.class, "ground.png"));
+    private static final TileMap mapImage = new TileMap(Utils.loadImage(PassableField.class, "ground2.png"));
+    private static final BufferedImage backgroundImage = Utils.loadImage(PassableField.class, "ground_background.png");
     private final int x;
     private final int y;
     private BufferedImage image;
@@ -38,6 +39,8 @@ public class PassableField extends Field {
 
     @Override
     void renderField(Graphics2D g, Meta meta, ImageObserver imageObserver) {
+
+        g.drawImage(backgroundImage, 0, 0, TILE_SIZE, TILE_SIZE, 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight(), imageObserver);
         g.drawImage(image, 0, 0, TILE_SIZE, TILE_SIZE, 0, 0, image.getWidth(), image.getHeight(), imageObserver);
     }
 

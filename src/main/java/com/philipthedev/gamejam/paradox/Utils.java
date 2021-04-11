@@ -2,6 +2,7 @@ package com.philipthedev.gamejam.paradox;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public final class Utils {
@@ -10,7 +11,7 @@ public final class Utils {
         //DO NOT INSTANTIATE
     }
 
-    public static Image loadImage(Class<?> clazz, String name) {
+    public static BufferedImage loadImage(Class<?> clazz, String name) {
         try {
             return ImageIO.read(clazz.getResourceAsStream(name));
         } catch (IOException e) {
