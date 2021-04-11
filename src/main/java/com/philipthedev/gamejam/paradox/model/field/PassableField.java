@@ -12,7 +12,7 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 
 public class PassableField extends Field {
 
-    private static final TileMap mapImage = new TileMap(Utils.loadImage(PassableField.class, "ground2.png"));
+    private static final TileMap mapImage = new TileMap(Utils.loadImage(PassableField.class, "walls.png"));
     private static final BufferedImage backgroundImage = Utils.loadImage(PassableField.class, "ground_background.png");
     private final int x;
     private final int y;

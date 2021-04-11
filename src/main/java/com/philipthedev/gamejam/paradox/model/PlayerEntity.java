@@ -1,5 +1,6 @@
 package com.philipthedev.gamejam.paradox.model;
 
+import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.actions.ConsumeTimeSplitter;
 import com.philipthedev.gamejam.paradox.model.actions.HitAction;
 import com.philipthedev.gamejam.paradox.model.actions.SkipRoundAction;
@@ -7,6 +8,7 @@ import com.philipthedev.gamejam.paradox.model.field.Field;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.util.Random;
 import java.util.Set;
@@ -15,8 +17,7 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 
 public class PlayerEntity extends Entity {
 
-    Random random = new Random();
-
+    private static final BufferedImage playerImage = Utils.loadImage(PlayerEntity.class, "player.png");
     private Track selectedTrack = null;
     private AttackAction attackAction = null;
     private AttackPhase attackPhase = AttackPhase.IDLE;
@@ -84,8 +85,7 @@ public class PlayerEntity extends Entity {
     @Override
     public void render(Graphics2D g, ImageObserver observer) {
         if (isVisible()) {
-            g.setColor(Color.YELLOW);
-            g.fillOval(getPosX(), getPosY(), TILE_SIZE, TILE_SIZE);
+            g.drawImage(playerImage, getPosX(), getPosY(), getPosX() + TILE_SIZE, getPosY() + TILE_SIZE, 0, 0, playerImage.getWidth(), playerImage.getHeight(), observer);
         }
     }
 
