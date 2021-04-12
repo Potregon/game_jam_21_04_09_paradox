@@ -2,6 +2,7 @@ package com.philipthedev.gamejam.paradox.ui.ingame;
 
 import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.Model;
+import com.philipthedev.gamejam.paradox.ui.MainFrame;
 import com.philipthedev.gamejam.paradox.ui.Meta;
 import com.philipthedev.gamejam.paradox.ui.Scene;
 
@@ -12,6 +13,7 @@ import java.awt.image.ImageObserver;
 public class YouWinScene implements Scene {
 
     private static final Image image = Utils.loadImage(YouWinScene.class, "YOU WIN.png");
+    private static final Image newGame = Utils.loadImage(YouWinScene.class, "new_game.png");
     private final Model model;
     private BufferedImage background;
     private int round = 0;
@@ -32,6 +34,22 @@ public class YouWinScene implements Scene {
         g.drawImage(background, 0, 0, imageObserver);
         g.setColor(new Color(255, 255, 255, round * 255 / 51));
         g.fillRect(0, 0, meta.getSize().width, meta.getSize().height);
+
+        int buttonBarY = meta.getSize().height - 80;
+        int enterButtonX = meta.getSize().width / 2 - 356 / 2;
+        int mouseX = meta.getMousePosition().x;
+        int mouseY = meta.getMousePosition().y;
+        if (mouseX >= enterButtonX && mouseX < enterButtonX + 356 && mouseY >= buttonBarY) {
+            g.drawImage(newGame, enterButtonX, buttonBarY, enterButtonX + 356, buttonBarY + 56, 0, 56, 356, 112, imageObserver);
+            if (meta.isMouseDown()) {
+                Model model = new Model();
+                MainFrame.get().setScene(new InGameScene(model));
+            }
+        }
+        else {
+            g.drawImage(newGame, enterButtonX, buttonBarY, enterButtonX + 356, buttonBarY + 56, 0, 0, 356, 56, imageObserver);
+        }
+
         if (round > 0) {
             int targetY = meta.getSize().height / 2 - 27;
             int x = meta.getSize().width / 2 - 160;
