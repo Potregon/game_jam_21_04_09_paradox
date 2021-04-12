@@ -70,6 +70,15 @@ public class InGameScene implements Scene {
                 g.setTransform(transform);
             }
         }
+        //special action
+        SpecialAction specialAction = model.getSpecialAction();
+        if (specialAction != null) {
+            specialAction.renderBackground(g, imageObserver);
+        }
+        // portals
+        for (var portal : model.listPortals()) {
+            portal.render(g, model, imageObserver);
+        }
         for (var entity : model.listEntities()) {
             entity.render(g, imageObserver);
         }
@@ -82,14 +91,10 @@ public class InGameScene implements Scene {
         if (playerEntity != null) {
             playerEntity.renderAttack(g, imageObserver);
         }
-        // portals
-        for (var portal : model.listPortals()) {
-            portal.render(g, model, imageObserver);
-        }
         //special action
-        SpecialAction specialAction = model.getSpecialAction();
+        specialAction = model.getSpecialAction();
         if (specialAction != null) {
-            specialAction.render(g, imageObserver);
+            specialAction.renderForeground(g, imageObserver);
         }
         meta.clear();
         g.setTransform(outerTransform);

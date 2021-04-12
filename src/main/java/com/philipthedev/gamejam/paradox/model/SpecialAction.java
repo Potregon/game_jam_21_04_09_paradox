@@ -10,6 +10,12 @@ public interface SpecialAction {
 
     void doAction(Model model);
 
-    void render(Graphics2D g, ImageObserver imageObserver);
+    default void renderBackground(Graphics2D g, ImageObserver imageObserver) {
+
+    }
+
+    default void renderForeground(Graphics2D g, ImageObserver imageObserver) {
+
+    }
 
 }

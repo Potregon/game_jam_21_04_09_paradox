@@ -4,6 +4,7 @@ import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.actions.ConsumeTimeSplitter;
 import com.philipthedev.gamejam.paradox.model.actions.HitAction;
 import com.philipthedev.gamejam.paradox.model.actions.SkipRoundAction;
+import com.philipthedev.gamejam.paradox.model.actions.SummonPortalAction;
 import com.philipthedev.gamejam.paradox.model.field.Field;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 
@@ -23,10 +24,10 @@ public class PlayerEntity extends Entity {
     private AttackPhase attackPhase = AttackPhase.IDLE;
 
     public PlayerEntity(int fieldX, int fieldY, int startRound) {
-        super(fieldX, fieldY, 4, 5, 0, startRound);
+        super(fieldX, fieldY, 10, 5, 0, startRound);
     }
     public PlayerEntity(PlayerEntity original, int fieldX, int fieldY, int round) {
-        super(fieldX, fieldY, 4, original.getRange(), original.getTimeSplitter(), round);
+        super(fieldX, fieldY, 10, original.getRange(), original.getTimeSplitter(), round);
     }
 
     @Override
@@ -52,6 +53,9 @@ public class PlayerEntity extends Entity {
         switch (attackPhase) {
             case IDLE:
                 model.addActionButton(new HitAction(this));
+                if (this.getHP() > 5) {
+                    model.addActionButton(new SummonPortalAction(this));
+                }
                 if (this.getTimeSplitter() > 0) {
                     model.addActionButton(new ConsumeTimeSplitter(this));
                 }

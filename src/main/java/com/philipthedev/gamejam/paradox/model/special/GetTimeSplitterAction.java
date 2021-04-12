@@ -63,7 +63,7 @@ public class GetTimeSplitterAction implements SpecialAction {
     }
 
     @Override
-    public void render(Graphics2D g, ImageObserver imageObserver) {
+    public void renderForeground(Graphics2D g, ImageObserver imageObserver) {
         g.setColor(Color.ORANGE);
         g.fillOval(posX + TILE_SIZE / 2 - 10, posY, 20, TILE_SIZE);
     }

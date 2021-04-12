@@ -35,7 +35,6 @@ public final class Model {
     private final List<ActionButton> actionButtons = new ArrayList<>();
     private SpecialAction specialAction = null;
 
-    private Portal startPortal = null;
     private final List<Portal> portals = new ArrayList<>();
 
     public Model() {
@@ -78,7 +77,6 @@ public final class Model {
                 fields[x][y].validate(this);
             }
         }
-        startPortal = new Portal(playerEntity.getFieldX(), playerEntity.getFieldY(), 2);
     }
 
     public void foeKilled() {
@@ -89,12 +87,7 @@ public final class Model {
     }
 
     public void enterPortal(Portal portal) {
-        if (portal == startPortal) {
-            startPortal = new Portal(startPortal.getFieldX(), startPortal.getFieldY(), startPortal.getRound() + 1);
-        }
-        else {
-            portals.remove(portal);
-        }
+        portals.remove(portal);
         GhostPlayerEntity ghostPlayerEntity = new GhostPlayerEntity(playerEntity);
         entities.add(ghostPlayerEntity);
         playerEntity = new PlayerEntity(playerEntity, portal.getFieldX(), portal.getFieldY(), portal.getRound());
@@ -119,9 +112,6 @@ public final class Model {
             if (portal.isBlocked(this, x, y)) {
                 return true;
             }
-        }
-        if (startPortal.isBlocked(this, x, y)) {
-            return true;
         }
         return false;
     }
@@ -186,9 +176,7 @@ public final class Model {
 
     public List<Portal> listPortals() {
         synchronized (portals) {
-            List<Portal> portals = new ArrayList<>(this.portals);
-            portals.add(startPortal);
-            return portals;
+            return Collections.unmodifiableList(new ArrayList<>(this.portals));
         }
     }
 
@@ -254,9 +242,6 @@ public final class Model {
 
     private void nextRound() {
         //update portal preview
-        if (startPortal.getRound() == round) {
-            startPortal.updatePreview(this);
-        }
         for (var portal : portals) {
             if (portal.getRound() == round) {
                 portal.updatePreview(this);

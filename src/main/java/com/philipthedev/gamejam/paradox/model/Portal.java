@@ -1,5 +1,6 @@
 package com.philipthedev.gamejam.paradox.model;
 
+import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Position;
 import com.philipthedev.gamejam.paradox.ui.MainFrame;
 import com.philipthedev.gamejam.paradox.ui.Meta;
@@ -15,12 +16,15 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 /**
  * Entry portal.
  */
-public final class Portal {
+public final class Portal implements SpecialAction {
+
+    private final static Image image = Utils.loadImage(Portal.class, "portal_attack.png");
 
     private final int round;
     private final int fieldX;
     private final int fieldY;
     private BufferedImage preview = null;
+    private int index = -1;
 
     public Portal(int fieldX, int fieldY, int round) {
         this.round = round;
@@ -49,8 +53,18 @@ public final class Portal {
 
     public void render(Graphics2D g, Model model, ImageObserver observer) {
         if (model.getRound() == round) {
-            g.setColor(Color.BLUE);
-            g.drawOval(fieldX * TILE_SIZE, fieldY * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            if (index == -1) {
+                model.setSpecialAction(this);
+            }
+            if (index >= 14) {
+                g.drawImage(image,
+                        fieldX * TILE_SIZE, fieldY * TILE_SIZE, fieldX * TILE_SIZE + TILE_SIZE, fieldY * TILE_SIZE + TILE_SIZE,
+                        0, index * 64, 64, index * 64 + 64,
+                        observer);
+            }
+        }
+        else {
+            index = -1;
         }
     }
 
@@ -64,5 +78,21 @@ public final class Portal {
 
     public BufferedImage getPreview() {
         return preview;
+    }
+
+    @Override
+    public void doAction(Model model) {
+        index++;
+        if (index >= 14) {
+            model.setSpecialAction(null);
+        }
+    }
+
+    @Override
+    public void renderBackground(Graphics2D g, ImageObserver imageObserver) {
+        g.drawImage(image,
+                fieldX * TILE_SIZE, fieldY * TILE_SIZE, fieldX * TILE_SIZE + TILE_SIZE, fieldY * TILE_SIZE + TILE_SIZE,
+                    0, index * 64, 64, index * 64 + 64,
+                imageObserver);
     }
 }
