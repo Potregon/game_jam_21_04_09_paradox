@@ -40,12 +40,13 @@ public class InGameScene implements Scene {
 
     @Override
     public void render(Graphics2D g, Meta meta, ImageObserver imageObserver) {
-        if (model.getRound() > model.getMaxRound()) {
-            MainFrame.get().setScene(new ChoosePortalScene(model, InGameScene::new));
-            return;
-        }
+
         PlayerEntity playerEntity = model.getPlayerEntity();
         if (positionOrNull == null) {
+            if (model.getRound() > model.getMaxRound()) {
+                MainFrame.get().setScene(new ChoosePortalScene(model, InGameScene::new));
+                return;
+            }
             model.calculateModel();
         }
         if (positionOrNull != null) {
