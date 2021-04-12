@@ -4,6 +4,7 @@ import com.philipthedev.gamejam.paradox.model.pathfinding.Pathfinder;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Position;
 import com.philipthedev.gamejam.paradox.model.pathfinding.Track;
 
+import java.awt.desktop.PrintFilesEvent;
 import java.util.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
@@ -15,6 +16,7 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
  * Something which acts in the world of this game.
  */
 public abstract class Entity {
+    private final static int SPEED = 8;
 
     private final int startPosX;
     private final int startPosY;
@@ -135,16 +137,28 @@ public abstract class Entity {
                     int moveX = moveToPosition.getX() * TILE_SIZE;
                     int moveY = moveToPosition.getY() * TILE_SIZE;
                     if (moveX > posX) {
-                        posX++;
+                        posX += SPEED;
+                        if (moveX < posX) {
+                            posX = moveX;
+                        }
                     }
                     if (moveX < posX) {
-                        posX--;
+                        posX-= SPEED;
+                        if (moveX > posX) {
+                            posX = moveX;
+                        }
                     }
                     if (moveY > posY) {
-                        posY++;
+                        posY+= SPEED;
+                        if (moveY < posY) {
+                            posY = moveY;
+                        }
                     }
                     if (moveY < posY) {
-                        posY--;
+                        posY-= SPEED;
+                        if (moveY > posY) {
+                            posY = moveY;
+                        }
                     }
                     if (posX == moveX && posY == moveY) {
                         int nextPositionIndex = currentTrack.getStepIndex(moveToPosition) + 1;
@@ -316,7 +330,26 @@ public abstract class Entity {
     }
 
     public boolean isBlockingField(Model model, int x, int y) {
-        return isVisible() && startRound <= model.getRound() && phase != Phase.MOVEMENT && getFieldX() == x && getFieldY() == y;
+        if (! isVisible() || phase == Phase.MOVEMENT) {
+            return false;
+        }
+        if (startRound == model.getRound() + 1) {
+            return getFieldX() == x && getFieldY() == y;
+        }
+        if (startRound > model.getRound()) {
+            return false;
+        }
+        if (getFieldX() == x && getFieldY() == y) {
+            return true;
+        }
+        final Track track = roundToTrack.get(model.getRound());
+        if (track != null) {
+            Position position = track.getTarget();
+            if (position.getX() == x && position.getY() == y) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getMaxHP() {

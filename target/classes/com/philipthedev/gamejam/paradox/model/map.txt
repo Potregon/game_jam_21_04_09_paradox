@@ -1,5 +1,5 @@
-WWWWWWWWWWWWWWWWWWWWWW
-W---W----t-----t-----W
-W-p------------------W
-W---W-t-----t--------W
-WWWWWWWWWWWWWWWWWWWWWW
+WWWWWWWWWWWWWWWWW
+W---W----t-----tW
+W-p-------------W
+W---W-t-----t---W
+WWWWWWWWWWWWWWWWW
