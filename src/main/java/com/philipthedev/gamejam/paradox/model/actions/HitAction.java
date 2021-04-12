@@ -50,6 +50,11 @@ public class HitAction implements ActionButton {
         }
     }
 
+    @Override
+    public String tooltip() {
+        return "Deals 1 mundane damage to a foe.";
+    }
+
     private void apply(Model model, int x, int y) {
         Field field = model.getFieldOrNull(x, y);
         if (field == null) {

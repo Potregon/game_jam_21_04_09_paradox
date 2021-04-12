@@ -11,4 +11,6 @@ public interface ActionButton {
 
     void render(Graphics2D g, int tileSize, boolean hovered, ImageObserver imageObserver);
 
+    String tooltip();
+
 }

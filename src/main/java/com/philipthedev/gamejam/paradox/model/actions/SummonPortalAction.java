@@ -2,6 +2,7 @@ package com.philipthedev.gamejam.paradox.model.actions;
 
 import com.philipthedev.gamejam.paradox.Utils;
 import com.philipthedev.gamejam.paradox.model.*;
+import com.philipthedev.gamejam.paradox.model.attacks.FiveSelveDamage;
 import com.philipthedev.gamejam.paradox.model.attacks.Hit;
 import com.philipthedev.gamejam.paradox.model.field.Field;
 
@@ -50,6 +51,11 @@ public class SummonPortalAction implements ActionButton {
         }
     }
 
+    @Override
+    public String tooltip() {
+        return "Sacrifices 5 life points and summons a portal. You can later travel back in time to this portal.";
+    }
+
     private void apply(Model model, int x, int y) {
         Field field = model.getFieldOrNull(x, y);
         if (field == null || model.isBlocked(x, y)) {
@@ -58,7 +64,7 @@ public class SummonPortalAction implements ActionButton {
         field.setFieldAction(new FieldAction(new Color(0, 255, 0, 50), new Color(0, 255, 0, 250), () -> {
             model.addPortal(new Portal(x, y, model.getRound()));
             model.clearActions();
-            provoker.setAttackAction(AttackAction.NEXT_ROUND);
+            provoker.setAttackAction(new FiveSelveDamage());
         }));
     }
 

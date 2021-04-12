@@ -21,10 +21,13 @@ public class ChoosePortalScene implements Scene {
 
     private static final Image embark = Utils.loadImage(ChoosePortalScene.class, "embark.png");
 
+    private final String label = "Time is up! Choose a portal to travel back.";
+
     private final Model model;
     private final Function<Model, Scene> sceneSupplier;
     private final List<Portal> portalList = new ArrayList<>();
     private int selectIndex = 0;
+    private boolean mouseWasDown;
 
     public ChoosePortalScene(Model model, Function<Model, Scene> sceneSupplier) {
         this.model = model;
@@ -38,8 +41,11 @@ public class ChoosePortalScene implements Scene {
 
     @Override
     public void render(Graphics2D g, Meta meta, ImageObserver imageObserver) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, meta.getSize().width, meta.getSize().height);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
+        g.drawString(label, meta.getSize().width / 2 - g.getFontMetrics().stringWidth(label) / 2, 20 + g.getFontMetrics().getAscent());
         if (portalList.isEmpty()) {
             MainFrame.get().setScene(new YouLoseScene(model));
             return;
@@ -47,7 +53,7 @@ public class ChoosePortalScene implements Scene {
 
         Portal portal = portalList.get(selectIndex);
         BufferedImage image = portal.getPreview();
-        g.drawImage(image, meta.getSize().width / 2 - image.getWidth() / 2, 50, imageObserver);
+        g.drawImage(image, meta.getSize().width / 2 - image.getWidth() / 2, 40 + g.getFontMetrics().getHeight(), imageObserver);
 
         int buttonBarY = meta.getSize().height - 80;
         int enterButtonX = meta.getSize().width / 2 - 269 / 2;
@@ -63,6 +69,46 @@ public class ChoosePortalScene implements Scene {
         }
         else {
             g.drawImage(embark, enterButtonX, buttonBarY, enterButtonX + 269, buttonBarY + 56, 0, 0, 269, 56, imageObserver);
+        }
+        if (portalList.size() > 1) {
+            if (mouseX < meta.getSize().width / 2) {
+                g.setColor(Color.RED);
+                g.fillPolygon(new int[]{enterButtonX - 5 - 15, enterButtonX - 5, enterButtonX -5},
+                        new int[] {buttonBarY  + 28, buttonBarY, buttonBarY + 56},
+                        3);
+                if (meta.isMouseDown() && !mouseWasDown) {
+                    selectIndex -= 1;
+                    if (selectIndex < 0) {
+                        selectIndex = portalList.size() -1;
+                    }
+                }
+            }
+            else {
+                g.setColor(Color.ORANGE);
+                g.fillPolygon(new int[]{enterButtonX - 5 - 15, enterButtonX - 5, enterButtonX -5},
+                        new int[] {buttonBarY  + 28, buttonBarY, buttonBarY + 56},
+                        3);
+            }
+
+            if (mouseX >= meta.getSize().width / 2) {
+                g.setColor(Color.RED);
+                g.fillPolygon(new int[]{enterButtonX + 269 + 5, enterButtonX + 269 + 5, enterButtonX + 269 + 15},
+                        new int[] {buttonBarY, buttonBarY + 56, buttonBarY + 28},
+                        3);
+                if (meta.isMouseDown() && !mouseWasDown) {
+                    selectIndex += 1;
+                    if (selectIndex >= portalList.size()) {
+                        selectIndex = 0;
+                    }
+                }
+            }
+            else {
+                g.setColor(Color.ORANGE);
+                g.fillPolygon(new int[]{enterButtonX + 269 + 5, enterButtonX + 269 + 5, enterButtonX + 269 + 15},
+                        new int[] {buttonBarY, buttonBarY + 56, buttonBarY + 28},
+                        3);
+            }
+            mouseWasDown = meta.isMouseDown();
         }
     }
 }

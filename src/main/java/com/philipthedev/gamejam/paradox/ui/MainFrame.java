@@ -34,6 +34,7 @@ public final class MainFrame extends JFrame implements MouseMotionListener, Mous
         addKeyListener(this);
 
         setVisible(true);
+        requestFocus();
 
         Thread renderInvocationLoop = new Thread(this::renderInvocationLoop);
         renderInvocationLoop.setName("Render Invocation Loop");

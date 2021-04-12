@@ -24,10 +24,10 @@ public class PlayerEntity extends Entity {
     private AttackPhase attackPhase = AttackPhase.IDLE;
 
     public PlayerEntity(int fieldX, int fieldY, int startRound) {
-        super(fieldX, fieldY, 10, 5, 0, startRound);
+        super(fieldX, fieldY, 20, 5, 0, startRound);
     }
     public PlayerEntity(PlayerEntity original, int fieldX, int fieldY, int round) {
-        super(fieldX, fieldY, 10, original.getRange(), original.getTimeSplitter(), round);
+        super(fieldX, fieldY, 20, original.getRange(), original.getTimeSplitter(), round);
     }
 
     @Override

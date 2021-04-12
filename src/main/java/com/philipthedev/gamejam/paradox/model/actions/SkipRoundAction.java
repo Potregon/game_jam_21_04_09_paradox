@@ -36,4 +36,9 @@ public class SkipRoundAction implements ActionButton {
             g.drawImage(icon, 0, 0, tileSize, tileSize, 0, 0, 32, 32, imageObserver);
         }
     }
+
+    @Override
+    public String tooltip() {
+        return "Skips this round.";
+    }
 }
