@@ -1,16 +1,16 @@
 package com.philipthedev.gamejam.paradox.ui;
 
+import com.philipthedev.gamejam.paradox.model.foes.ChronoTroll;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 /**
  * Frame to display the game.
  */
-public final class MainFrame extends JFrame implements MouseMotionListener, MouseListener {
+public final class MainFrame extends JFrame implements MouseMotionListener, MouseListener, KeyListener {
 
     private static final MainFrame mainFrame = new MainFrame();
 
@@ -22,12 +22,16 @@ public final class MainFrame extends JFrame implements MouseMotionListener, Mous
 
     //singleton
     private MainFrame() {
-        setTitle("The Paradox that Ends the World");
+        setTitle("Clear the Dungeon in Time");
+        setIconImage(ChronoTroll.timeSplitter);
+        setBounds(0, 0, 50, 50);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);
+        setResizable(false);
 
         addMouseListener(this);
         addMouseMotionListener(this);
+        addKeyListener(this);
 
         setVisible(true);
 
@@ -123,5 +127,22 @@ public final class MainFrame extends JFrame implements MouseMotionListener, Mous
         int x = e.getX();
         int y = e.getY();
         this.mousePosition = new Point(x, y);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            MainFrame.get().setScene(new OutroScene());
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }

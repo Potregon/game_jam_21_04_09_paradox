@@ -20,6 +20,7 @@ import static com.philipthedev.gamejam.paradox.model.Model.TILE_SIZE;
 public class ChronoTroll extends Entity {
 
     private final static BufferedImage image = Utils.loadImage(ChronoTroll.class, "chronotroll.png");
+    public final static BufferedImage timeSplitter = Utils.loadImage(ChronoTroll.class, "crystal.png");
     private int actionPoints = 1;
 
     public ChronoTroll(int fieldX, int fieldY) {

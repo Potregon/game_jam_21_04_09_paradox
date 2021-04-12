@@ -3,6 +3,7 @@ package com.philipthedev.gamejam.paradox.model.special;
 import com.philipthedev.gamejam.paradox.model.Entity;
 import com.philipthedev.gamejam.paradox.model.Model;
 import com.philipthedev.gamejam.paradox.model.SpecialAction;
+import com.philipthedev.gamejam.paradox.model.foes.ChronoTroll;
 
 import java.awt.*;
 import java.awt.image.ImageObserver;
@@ -64,7 +65,6 @@ public class GetTimeSplitterAction implements SpecialAction {
 
     @Override
     public void renderForeground(Graphics2D g, ImageObserver imageObserver) {
-        g.setColor(Color.ORANGE);
-        g.fillOval(posX + TILE_SIZE / 2 - 10, posY, 20, TILE_SIZE);
+        g.drawImage(ChronoTroll.timeSplitter, posX + TILE_SIZE / 2 - 10, posY, imageObserver);
     }
 }
