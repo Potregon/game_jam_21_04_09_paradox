@@ -4,6 +4,8 @@ import com.philipthedev.gamejam.paradox.model.field.Field;
 import com.philipthedev.gamejam.paradox.model.field.PassableField;
 import com.philipthedev.gamejam.paradox.model.field.WallField;
 import com.philipthedev.gamejam.paradox.model.foes.ChronoTroll;
+import com.philipthedev.gamejam.paradox.ui.MainFrame;
+import com.philipthedev.gamejam.paradox.ui.ingame.YouWinScene;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -27,6 +29,9 @@ public final class Model {
     private int round = 1;
     private int maxRound = 3;
 
+    private final int foeCount;
+    private int killedFoes;
+
     private final List<ActionButton> actionButtons = new ArrayList<>();
     private SpecialAction specialAction = null;
 
@@ -42,6 +47,7 @@ public final class Model {
         this.fields = new Field[columnAmount][rowAmount];
         this.width = columnAmount;
         this.height = rowAmount;
+        int forCount = 0;
         for (int x = 0; x < columnAmount; x++) {
             for (int y = 0; y < rowAmount; y++) {
                 String row = rows[y];
@@ -57,6 +63,7 @@ public final class Model {
                     case 't':
                         fields[x][y] = new PassableField(x, y);
                         entities.add(new ChronoTroll(x, y));
+                        forCount++;
                         break;
                     default:
                         fields[x][y] = new PassableField(x, y);
@@ -64,6 +71,7 @@ public final class Model {
                 }
             }
         }
+        this.foeCount = forCount;
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -71,6 +79,13 @@ public final class Model {
             }
         }
         startPortal = new Portal(playerEntity.getFieldX(), playerEntity.getFieldY(), 2);
+    }
+
+    public void foeKilled() {
+        killedFoes++;
+        if (killedFoes >= foeCount) {
+            MainFrame.get().setScene(new YouWinScene(this));
+        }
     }
 
     public void enterPortal(Portal portal) {
@@ -257,6 +272,7 @@ public final class Model {
             playerEntity.reset();
         }
         round = 1;
+        killedFoes = 0;
     }
 
     public PlayerEntity getPlayerEntity() {

@@ -12,6 +12,13 @@ public interface AttackAction {
         }
     };
 
+    AttackAction SKIP_ROUND = new AttackAction() {
+        @Override
+        public boolean executeAction(Entity entity, Model model) {
+            return true;
+        }
+    };
+
     /**
      *
      * @param entity

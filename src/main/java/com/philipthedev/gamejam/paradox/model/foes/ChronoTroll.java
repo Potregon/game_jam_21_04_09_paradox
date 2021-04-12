@@ -31,6 +31,9 @@ public class ChronoTroll extends Entity {
         Track bestTrack = null;
         int bestDistance = Integer.MAX_VALUE;
         final PlayerEntity playerEntity = model.getPlayerEntity();
+        if (!playerEntity.isVisible()) {
+            return new Track(-1, -1);
+        }
         Position playerPosition = new Position(playerEntity.getFieldX(), playerEntity.getFieldY());
         for (var track : tracks) {
             int distance = playerPosition.euclideanDistance(track.getTarget());
@@ -43,7 +46,7 @@ public class ChronoTroll extends Entity {
             return bestTrack;
         }
         else {
-            return new Track(getFieldX(), getFieldY());
+            return new Track(-1, -1);
         }
     }
 
@@ -61,6 +64,7 @@ public class ChronoTroll extends Entity {
         if (killer instanceof PlayerEntity) {
             model.setSpecialAction(new GetTimeSplitterAction(this, killer));
         }
+        model.foeKilled();
     }
 
     @Override
@@ -71,6 +75,9 @@ public class ChronoTroll extends Entity {
             if (position.euclideanDistance(getFieldPosition()) <= 1) {
                 actionPoints--;
                 return new Hit(playerEntity.getFieldPosition());
+            }
+            else {
+                return AttackAction.SKIP_ROUND;
             }
         }
         actionPoints = 1;

@@ -57,7 +57,9 @@ public class HitAction implements ActionButton {
         }
         Entity entity = model.getEntityOrNull(x, y);
         if (entity == null) {
-            field.setFieldAction(new FieldAction(new Color(250, 200, 0, 50), new Color(250, 200, 0, 250), () -> {}));
+            if (!field.isBlocked()) {
+                field.setFieldAction(new FieldAction(new Color(250, 200, 0, 50), new Color(250, 200, 0, 250), () -> {}));
+            }
         }
         else {
             field.setFieldAction(new FieldAction(new Color(0, 255, 0, 50), new Color(0, 255, 0, 250), () -> {

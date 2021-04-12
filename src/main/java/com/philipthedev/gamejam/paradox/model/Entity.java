@@ -110,6 +110,11 @@ public abstract class Entity {
                         if (currentTrack == null) {
                             return RoundState.PENDING;
                         }
+                        else if (currentTrack.getTarget().getX() == -1) {
+                            this.currentTrack = null;
+                            phase = Phase.IDLE;
+                            return RoundState.FINISHED;
+                        }
                         else {
                             roundToTrack.put(model.getRound(), currentTrack);
                         }
@@ -180,6 +185,12 @@ public abstract class Entity {
                     currentAttackAction = getAttackActionOrNull(model);
                     if (currentAttackAction == null) {
                         return RoundState.PENDING;
+                    }
+                    else if (currentAttackAction == AttackAction.SKIP_ROUND) {
+                        savedAttackActions.clear();
+                        currentAttackAction = null;
+                        phase = Phase.IDLE;
+                        return RoundState.FINISHED;
                     }
                     else if (currentAttackAction == AttackAction.NEXT_ROUND) {
                         savedAttackActions.add(AttackAction.NEXT_ROUND);
