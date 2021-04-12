@@ -1,10 +1,7 @@
 package com.philipthedev.gamejam.paradox;
 
-import com.philipthedev.gamejam.paradox.model.Model;
-import com.philipthedev.gamejam.paradox.test.TestScene;
 import com.philipthedev.gamejam.paradox.ui.IntroScene;
 import com.philipthedev.gamejam.paradox.ui.MainFrame;
-import com.philipthedev.gamejam.paradox.ui.ingame.InGameScene;
 
 /**
  * Contains the main method to start this game.
